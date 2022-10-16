@@ -14,6 +14,8 @@
 		388A277028F823530019C70D /* VoiceNoteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A276F28F823530019C70D /* VoiceNoteTests.swift */; };
 		388A277A28F823530019C70D /* VoiceNoteUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A277928F823530019C70D /* VoiceNoteUITests.swift */; };
 		388A277C28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A277B28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift */; };
+		388A278928F8240E0019C70D /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A278828F8240E0019C70D /* Note.swift */; };
+		388A278B28F825180019C70D /* AllNotes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A278A28F825180019C70D /* AllNotes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +46,8 @@
 		388A277528F823530019C70D /* VoiceNoteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoiceNoteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		388A277928F823530019C70D /* VoiceNoteUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteUITests.swift; sourceTree = "<group>"; };
 		388A277B28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		388A278828F8240E0019C70D /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		388A278A28F825180019C70D /* AllNotes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllNotes.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,8 @@
 				388A276028F823500019C70D /* ContentView.swift */,
 				388A276228F823530019C70D /* Assets.xcassets */,
 				388A276428F823530019C70D /* Preview Content */,
+				388A278828F8240E0019C70D /* Note.swift */,
+				388A278A28F825180019C70D /* AllNotes.swift */,
 			);
 			path = VoiceNote;
 			sourceTree = "<group>";
@@ -259,6 +265,8 @@
 			files = (
 				388A276128F823500019C70D /* ContentView.swift in Sources */,
 				388A275F28F823500019C70D /* VoiceNoteApp.swift in Sources */,
+				388A278928F8240E0019C70D /* Note.swift in Sources */,
+				388A278B28F825180019C70D /* AllNotes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
