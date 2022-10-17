@@ -8,13 +8,12 @@
 import SwiftUI
 
 
-// TODO - Design NewNote
+
 
 struct ContentView: View {
     
     @StateObject var allNotes = AllNotes()
 
-    
     var body: some View {
         
         VStack {
@@ -68,9 +67,9 @@ struct NotesList: View {
         
                     NavigationLink(destination: EditNoteView(selectedNote: note)) {
                         
-                        Text(note.noteTitle)
+                        ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent)
                             .listRowBackground(Color.init(red: 245/255, green: 245/255, blue: 245/255))
-                            .font(.title2)
+//
 
                     }
                     
@@ -79,6 +78,31 @@ struct NotesList: View {
             .listStyle(SidebarListStyle())
             
         }
+    }
+}
+
+struct ListCell: View {
+    var noteTitle: String
+    var noteContent: String
+    
+    var body: some View {
+        HStack {
+            VStack (alignment: .leading){
+                Text(noteTitle)
+                    .font(.system(size: 18))
+                    .bold()
+        
+                Text(noteContent)
+                    .fontWeight(.light)
+                    .font(.system(size: 14))
+                    .lineLimit(2)
+            }
+            Spacer()
+            // Add later - if recording != nil {}
+            Image(systemName: "mic")
+        }
+        
+       
     }
 }
 

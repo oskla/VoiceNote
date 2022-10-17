@@ -14,11 +14,11 @@ class AllNotes: ObservableObject {
     
     init() {
         
-//        addEntry(newNote: Note(noteTitle: "Titel", noteContent: "content", recording: "Recording"))
-//        addEntry(newNote: Note(noteTitle: "Titel1", noteContent: "content2", recording: "Recording"))
-//        addEntry(newNote: Note(noteTitle: "Titel2", noteContent: "content3", recording: "Recording"))
-//        addEntry(newNote: Note(noteTitle: "Titel3", noteContent: "content4", recording: "Recording"))
-//        addEntry(newNote: Note(noteTitle: "Titel4", noteContent: "content5", recording: "Recording"))
+        addEntry(newNote: Note(noteTitle: "Titel", noteContent: "content", recording: "Recording"))
+        addEntry(newNote: Note(noteTitle: "Titel1", noteContent: "content2", recording: "Recording"))
+        addEntry(newNote: Note(noteTitle: "Titel2", noteContent: "content3", recording: "Recording"))
+        addEntry(newNote: Note(noteTitle: "Titel3", noteContent: "content4", recording: "Recording"))
+        addEntry(newNote: Note(noteTitle: "Titel4", noteContent: "content5", recording: "Recording"))
         
     }
     
@@ -37,11 +37,11 @@ class AllNotes: ObservableObject {
     
     func editNote(note: Note)  {
        
-        if let note2 = notes.first(where: {$0.id == note.id}) {
-            let index = notes.firstIndex(of: note2)
+        if let selectedNote = notes.first(where: {$0.id == note.id}) {
+            let index = notes.firstIndex(of: selectedNote)
             
             notes[index!].noteTitle = note.noteTitle
-        
+            notes[index!].noteContent = note.noteContent
             
         }
             
