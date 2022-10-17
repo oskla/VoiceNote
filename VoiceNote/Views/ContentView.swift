@@ -8,16 +8,20 @@
 import SwiftUI
 
 
-
+// TODO
+// 1. Add Voicememo function
+// 2. SearchBar in List
+// 3. Break out view from NewNote and EditNote and reuse that component in both
 
 struct ContentView: View {
     
     @StateObject var allNotes = AllNotes()
+    @ObservedObject var audioRecorder: AudioRecorder
 
     var body: some View {
         
         VStack {
-            NotesHomeView()
+            NotesHomeView(audioRecorder: audioRecorder)
                 
         }.environmentObject(allNotes)
         
@@ -28,27 +32,19 @@ struct ContentView: View {
 struct NotesHomeView: View {
     
     @EnvironmentObject var allNotes: AllNotes
-
+    @ObservedObject var audioRecorder: AudioRecorder
     
     var body: some View {
         NavigationView {
         VStack {
             NotesList()
-            CustomTabViewHome()
+            CustomTabViewHome(audioRecorder: audioRecorder)
         }
         .background(Color.init(red: 245/255, green: 245/255, blue: 245/255))
         }
     }
     }
 
-
-struct RecordingView: View {
-    var body: some View {
-        Text("Recording")
-        
-    }
-    
-}
 
 
 
@@ -67,7 +63,7 @@ struct NotesList: View {
         
                     NavigationLink(destination: EditNoteView(selectedNote: note)) {
                         
-                        ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent)
+                        ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent, recording: note.recording)
                             .listRowBackground(Color.init(red: 245/255, green: 245/255, blue: 245/255))
 //
 
@@ -84,6 +80,7 @@ struct NotesList: View {
 struct ListCell: View {
     var noteTitle: String
     var noteContent: String
+    var recording: String?
     
     var body: some View {
         HStack {
@@ -98,8 +95,11 @@ struct ListCell: View {
                     .lineLimit(2)
             }
             Spacer()
-            // Add later - if recording != nil {}
-            Image(systemName: "mic")
+          
+            if recording != nil {
+                Image(systemName: "mic")
+            }
+            
         }
         
        
@@ -117,6 +117,7 @@ struct NewNoteView: View {
 
     @State var noteContent = ""
     @State var noteTitle: String = "New note"
+ 
     
     var body: some View {
 
@@ -131,9 +132,7 @@ struct NewNoteView: View {
                 .background(.cyan)
                 .padding(.horizontal)
             
-            
-                
-            
+
             Button(action: {
                 allNotes.addEntry(newNote: Note(noteTitle: noteTitle, noteContent: noteContent, recording: "Recording"))
                 presentationMode.wrappedValue.dismiss()
@@ -184,7 +183,7 @@ struct EditNoteView: View {
 }
 
 struct CustomTabViewHome: View {
-    
+    @ObservedObject var audioRecorder: AudioRecorder
     var body: some View {
         
 
@@ -205,7 +204,7 @@ struct CustomTabViewHome: View {
                             
                     })
                     Spacer()
-                    NavigationLink(destination: RecordingView(), label: {
+                    NavigationLink(destination: RecordingView(audioRecorder: audioRecorder), label: {
                     Label("", systemImage: "record.circle")
                             .font(.system(size: 40))
                             .foregroundStyle(.pink, .gray)
@@ -224,67 +223,17 @@ struct CustomTabViewHome: View {
 }
 
 
-//struct TabViewView: View {
-//
-//        @ObservedObject var allNotes: AllNotes
-//
-//        @State private var isPresenting = false
-//        @State private var selectedItem = 1
-//        @State private var oldSelectedItem = 1
-//
-//        var body: some View {
-//
-//            TabView(selection: $selectedItem) {
-//                NotesHomeView(allNotes: allNotes)
-//                    .tabItem { Label("Home", systemImage: "list.dash")}
-//                    .tag(1)
-//
-//
-//                NavigationView{
-//                    NewNoteView()
-//                        .navigationTitle("hej")
-//                }
-//                .tabItem { Label("New note", systemImage: "list.dash")
-//                        }
-//
-//                    .tag(2)
-//
-//                Text("") // Empty background behind sheet
-//                    .tabItem { Label("New recording", systemImage: "list.dash")}
-//                    .tag(3)
-//            }
-//            .onChange(of: selectedItem) {
-//                print($selectedItem)
-//                if selectedItem == 3 {
-//                    self.isPresenting = true
-//                } else {
-//                    print(self.oldSelectedItem)
-//                    self.oldSelectedItem = $0
-//                    print(self.oldSelectedItem)
-//                }
-//            }
-//            .sheet(isPresented: $isPresenting, onDismiss: {
-//                self.selectedItem = self.oldSelectedItem
-//            }) {
-//                RecordingView()
-//            }
-//        }
-//
-//    }
-//
-//    }
-//
-
 
 
 
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
-            .previewDevice("iPhone 13 Pro")
+       // ContentView()
+        //    .previewDevice("iPhone 13 Pro")
        // NewNoteView().environmentObject(AllNotes())
        // EditNoteView(note: "hej").environmentObject(AllNotes())
        // NotesList().environmentObject(AllNotes())
+        RecordingView(audioRecorder: AudioRecorder())
     }
 }

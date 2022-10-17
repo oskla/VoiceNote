@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct VoiceNoteApp: App {
+  //  let contentView = ContentView(audioRecorder: AudioRecorder())
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(audioRecorder: AudioRecorder())
         }
     }
 }

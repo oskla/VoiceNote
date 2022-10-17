@@ -17,7 +17,7 @@ class AllNotes: ObservableObject {
         addEntry(newNote: Note(noteTitle: "Titel", noteContent: "content", recording: "Recording"))
         addEntry(newNote: Note(noteTitle: "Titel1", noteContent: "content2", recording: "Recording"))
         addEntry(newNote: Note(noteTitle: "Titel2", noteContent: "content3", recording: "Recording"))
-        addEntry(newNote: Note(noteTitle: "Titel3", noteContent: "content4", recording: "Recording"))
+        addEntry(newNote: Note(noteTitle: "Titel3", noteContent: "content4"))
         addEntry(newNote: Note(noteTitle: "Titel4", noteContent: "content5", recording: "Recording"))
         
     }

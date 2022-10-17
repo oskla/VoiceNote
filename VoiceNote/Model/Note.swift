@@ -13,7 +13,7 @@ struct Note : Codable, Identifiable, Equatable {
     var noteTitle: String
     var noteContent: String
   //  var date: Date
-    var recording: String // Add recording here later
+    var recording: String? // Add recording here later
    
    
 }
