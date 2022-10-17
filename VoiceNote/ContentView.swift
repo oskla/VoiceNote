@@ -13,6 +13,7 @@ import SwiftUI
 struct ContentView: View {
     
     @StateObject var allNotes = AllNotes()
+
     
     var body: some View {
         
@@ -28,6 +29,7 @@ struct ContentView: View {
 struct NotesHomeView: View {
     
     @EnvironmentObject var allNotes: AllNotes
+
     
     var body: some View {
         NavigationView {
@@ -54,28 +56,29 @@ struct RecordingView: View {
 struct NotesList: View {
     
     @EnvironmentObject var allNotes: AllNotes
-    @State var noteTitle = ""
     
     var body: some View {
-    
-            VStack {
-                List(){
-                    ForEach(allNotes.getAllNotes()) {
-                        note in
+        
+        VStack {
+            
+            List(){
+                
+                ForEach(allNotes.getAllNotes()) {
+                    note in
+        
+                    NavigationLink(destination: EditNoteView(selectedNote: note)) {
                         
-                        NavigationLink(destination: EditNoteView(selectedNote: note)) {
                         Text(note.noteTitle)
-
                             .listRowBackground(Color.init(red: 245/255, green: 245/255, blue: 245/255))
                             .font(.title2)
-                            
-                               
-                            
-                        }}
-                }
-                .listStyle(SidebarListStyle())
 
+                    }
+                    
+                }
             }
+            .listStyle(SidebarListStyle())
+            
+        }
     }
 }
 
@@ -125,7 +128,6 @@ struct EditNoteView: View {
     @EnvironmentObject var allNotes: AllNotes
     
     @State var selectedNote: Note
-    @State var noteTitle: String = "New note"
     
     var body: some View {
 
@@ -144,7 +146,8 @@ struct EditNoteView: View {
                 
             
             Button(action: {
-                selectedNote.noteTitle = "hej"
+                allNotes.editNote(note: selectedNote)
+
                 presentationMode.wrappedValue.dismiss()
             }, label: {
             Text("Save")
@@ -255,6 +258,7 @@ struct CustomTabViewHome: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .previewDevice("iPhone 13 Pro")
        // NewNoteView().environmentObject(AllNotes())
        // EditNoteView(note: "hej").environmentObject(AllNotes())
        // NotesList().environmentObject(AllNotes())

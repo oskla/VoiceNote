@@ -12,14 +12,13 @@ class AllNotes: ObservableObject {
     
     @Published var notes = [Note]()
     
-    
     init() {
         
-        addEntry(newNote: Note(noteTitle: "Titel", noteContent: "content", recording: "Recording"))
-        addEntry(newNote: Note(noteTitle: "Titel1", noteContent: "content2", recording: "Recording"))
-        addEntry(newNote: Note(noteTitle: "Titel2", noteContent: "content3", recording: "Recording"))
-        addEntry(newNote: Note(noteTitle: "Titel3", noteContent: "content4", recording: "Recording"))
-        addEntry(newNote: Note(noteTitle: "Titel4", noteContent: "content5", recording: "Recording"))
+//        addEntry(newNote: Note(noteTitle: "Titel", noteContent: "content", recording: "Recording"))
+//        addEntry(newNote: Note(noteTitle: "Titel1", noteContent: "content2", recording: "Recording"))
+//        addEntry(newNote: Note(noteTitle: "Titel2", noteContent: "content3", recording: "Recording"))
+//        addEntry(newNote: Note(noteTitle: "Titel3", noteContent: "content4", recording: "Recording"))
+//        addEntry(newNote: Note(noteTitle: "Titel4", noteContent: "content5", recording: "Recording"))
         
     }
     
@@ -36,10 +35,20 @@ class AllNotes: ObservableObject {
         return notes[index]
     }
     
-    func editNote(note: Note) {
+    func editNote(note: Note)  {
        
+        if let note2 = notes.first(where: {$0.id == note.id}) {
+            let index = notes.firstIndex(of: note2)
+            
+            notes[index!].noteTitle = note.noteTitle
         
-    }
+            
+        }
+            
+
+         
+        }
+        
  
     func getIndexByID(note: Note) -> [Note] {
         
