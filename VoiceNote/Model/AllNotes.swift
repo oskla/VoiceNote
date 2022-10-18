@@ -47,7 +47,11 @@ class AllNotes: ObservableObject {
             
 
          
-        }
+    }
+    func removeNote(at offsets: IndexSet) {
+        notes.remove(atOffsets: offsets)
+        
+    }
         
  
     func getIndexByID(note: Note) -> [Note] {

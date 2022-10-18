@@ -12,6 +12,8 @@ import SwiftUI
 // 1. Add Voicememo function
 // 2. SearchBar in List
 // 3. Break out view from NewNote and EditNote and reuse that component in both
+// 4. https://blckbirds.com/post/voice-recorder-app-in-swiftui-2/
+// 5. onDelete in NotesList
 
 struct ContentView: View {
     
@@ -52,6 +54,8 @@ struct NotesList: View {
     
     @EnvironmentObject var allNotes: AllNotes
     
+    
+    
     var body: some View {
         
         VStack {
@@ -65,16 +69,16 @@ struct NotesList: View {
                         
                         ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent, recording: note.recording)
                             .listRowBackground(Color.init(red: 245/255, green: 245/255, blue: 245/255))
-//
 
                     }
                     
-                }
+                }.onDelete(perform: allNotes.removeNote)
             }
             .listStyle(SidebarListStyle())
             
         }
     }
+    
 }
 
 struct ListCell: View {
@@ -229,11 +233,11 @@ struct CustomTabViewHome: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-       // ContentView()
+        ContentView(audioRecorder: AudioRecorder()).environmentObject(AllNotes())
         //    .previewDevice("iPhone 13 Pro")
        // NewNoteView().environmentObject(AllNotes())
        // EditNoteView(note: "hej").environmentObject(AllNotes())
        // NotesList().environmentObject(AllNotes())
-        RecordingView(audioRecorder: AudioRecorder())
+       // RecordingView(audioRecorder: AudioRecorder())
     }
 }
