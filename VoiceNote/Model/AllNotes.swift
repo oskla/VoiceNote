@@ -35,7 +35,7 @@ class AllNotes: ObservableObject {
         return notes[index]
     }
     
-    func editNote(note: Note)  {
+    func editNote(note: Note) {
        
         if let selectedNote = notes.first(where: {$0.id == note.id}) {
             let index = notes.firstIndex(of: selectedNote)

@@ -17,7 +17,6 @@ class AudioRecorder: NSObject, ObservableObject {
         fetchRecordings()
     }
     
-    
     let objectWillChange = PassthroughSubject<AudioRecorder, Never>()
     var audioRecorder: AVAudioRecorder!
     var recordings = [Recording]()

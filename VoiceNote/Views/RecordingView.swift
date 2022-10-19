@@ -10,12 +10,16 @@ import SwiftUI
 
 struct RecordingView: View {
     @ObservedObject var audioRecorder: AudioRecorder
+    @Binding var showRecordPopup: Bool
+    @Binding var showTabViewPopup: Bool
+    @Binding var showEditTabView: Bool
+    @EnvironmentObject var allNotes: AllNotes
     var body: some View {
        
-        NavigationView {
+       // NavigationView {
             VStack {
 
-                RecordingsList(audioRecorder: audioRecorder)
+              //  RecordingsList(audioRecorder: audioRecorder)
   
                         if audioRecorder.recording == false {
                             Button(action: {self.audioRecorder.startRecording()}) {
@@ -26,16 +30,28 @@ struct RecordingView: View {
                                     .padding(.bottom, 40)
                             }
                         } else {
-                            Button(action: {self.audioRecorder.stopRecording()}) {
+                            Button(action: {
+                                self.audioRecorder.stopRecording()
+                                allNotes.addEntry(newNote: Note(noteTitle: "new recording", noteContent: ""))
+                                showRecordPopup = false
+                                showTabViewPopup = true
+                                showEditTabView = true
+                                
+                            }) {
                                 Image(systemName: "stop.circle")
                                     .font(.system(size: 100))
                                     .foregroundStyle(.pink, .gray)
                                     .padding(.bottom, 40)
+                                
                             }
+                            
                         }
-            }
+            }.onAppear(perform: {
+                self.audioRecorder.startRecording()
+                showTabViewPopup = false
+            })
                 
-        }.navigationBarTitle("Recordings", displayMode: .inline)
+      //  }.navigationBarTitle("Recordings", displayMode: .inline)
         
     }
     
@@ -49,6 +65,7 @@ struct RecordingsList: View {
         List() {
             
             ForEach(audioRecorder.recordings, id: \.createdAt) {
+                
                 recording in
                 RecordingRow(audioURL: recording.fileURL)
             }
@@ -72,9 +89,9 @@ struct RecordingRow: View {
     }
 }
 
-struct RecordingsList_Previews: PreviewProvider {
-    static var previews: some View {
-      //  RecordingsList(audioRecorder: AudioRecorder())
-        RecordingView(audioRecorder: AudioRecorder())
-    }
-}
+//struct RecordingsList_Previews: PreviewProvider {
+//    static var previews: some View {
+//      //  RecordingsList(audioRecorder: AudioRecorder())
+//       // RecordingView(audioRecorder: AudioRecorder())
+//    }
+//}

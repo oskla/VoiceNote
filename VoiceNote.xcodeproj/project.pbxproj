@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3833F1E82900394000356843 /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3833F1E72900394000356843 /* NoteView.swift */; };
 		386731E728FDBED500BA0F3D /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386731E628FDBED500BA0F3D /* AudioRecorder.swift */; };
 		386731EB28FDC92F00BA0F3D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386731EA28FDC92F00BA0F3D /* Extensions.swift */; };
 		386731ED28FDD28600BA0F3D /* RecordingDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386731EC28FDD28600BA0F3D /* RecordingDataModel.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3833F1E72900394000356843 /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
 		386731E628FDBED500BA0F3D /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		386731E928FDC1E000BA0F3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		386731EA28FDC92F00BA0F3D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 			children = (
 				388A276028F823500019C70D /* ContentView.swift */,
 				386731F028FDD6C400BA0F3D /* RecordingView.swift */,
+				3833F1E72900394000356843 /* NoteView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				388A275F28F823500019C70D /* VoiceNoteApp.swift in Sources */,
 				388A278928F8240E0019C70D /* Note.swift in Sources */,
 				386731F128FDD6C400BA0F3D /* RecordingView.swift in Sources */,
+				3833F1E82900394000356843 /* NoteView.swift in Sources */,
 				388A278B28F825180019C70D /* AllNotes.swift in Sources */,
 				386731E728FDBED500BA0F3D /* AudioRecorder.swift in Sources */,
 				386731EF28FDD38F00BA0F3D /* Helper.swift in Sources */,
@@ -462,10 +466,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"VoiceNote/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4YVT736T6U;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = VoiceNote/Info.plist;
