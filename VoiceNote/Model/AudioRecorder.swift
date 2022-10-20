@@ -20,6 +20,7 @@ class AudioRecorder: NSObject, ObservableObject {
     let objectWillChange = PassthroughSubject<AudioRecorder, Never>()
     var audioRecorder: AVAudioRecorder!
     var recordings = [Recording]()
+    var placeHolderNote = Note(noteTitle: "placeholder2", noteContent: "placeholder2")
     var recording = false {
         didSet {
             objectWillChange.send(self)
@@ -62,7 +63,12 @@ class AudioRecorder: NSObject, ObservableObject {
         fetchRecordings()
     }
     
+   
+    
+    
     func fetchRecordings() {
+        
+        
         recordings.removeAll()
         
         let fileManager = FileManager.default
@@ -71,10 +77,13 @@ class AudioRecorder: NSObject, ObservableObject {
         
         for audio in directoryContents {
             let recording = Recording(fileURL: audio, createdAt: getCreationDate(for: audio))
+            
             recordings.append(recording)
+            
            _ = recordings.sorted(by: {$0.createdAt.compare($1.createdAt) == .orderedAscending})
             objectWillChange.send(self)
         }
+        
         
     }
     

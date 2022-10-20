@@ -13,6 +13,7 @@ struct RecordingView: View {
     @Binding var showRecordPopup: Bool
     @Binding var showTabViewPopup: Bool
     @Binding var showEditTabView: Bool
+    
     @EnvironmentObject var allNotes: AllNotes
     var body: some View {
        
@@ -51,7 +52,65 @@ struct RecordingView: View {
                 showTabViewPopup = false
             })
                 
-      //  }.navigationBarTitle("Recordings", displayMode: .inline)
+        
+    }
+    
+}
+
+struct RecordingEditNoteView: View {
+    @ObservedObject var audioRecorder: AudioRecorder
+    @EnvironmentObject var allNotes: AllNotes
+    
+    @Binding var showRecordPopup: Bool
+    @Binding var showEditTabView: Bool
+    @Binding var selectedNote: Note
+    
+    var body: some View {
+
+            VStack {
+  
+                        if audioRecorder.recording == false {
+                            Button(action: {self.audioRecorder.startRecording()}) {
+                                
+                                Image(systemName: "record.circle")
+                                    .font(.system(size: 100))
+                                    .foregroundStyle(.pink, .gray)
+                                    .padding(.bottom, 40)
+                                
+                            }
+                            
+                        } else {
+                            Button(action: {
+                                self.audioRecorder.stopRecording()
+                                
+                                allNotes.addEntry(newNote: Note(noteTitle: "new recording", noteContent: ""))
+                                showRecordPopup = false
+                                showEditTabView = true
+                                
+                              let currentRecording = allNotes.getLatestRecording(audioRecorder: audioRecorder, selectedNote: selectedNote)
+                                
+                                print("Current recording (fetched from function): \(currentRecording)")
+                                if let currentRecording = currentRecording {
+                                    
+                                    selectedNote.recording.append(currentRecording)
+                                }
+                                print("Selected note recording(s): \(selectedNote.recording)")
+                                
+                            }) {
+                                Image(systemName: "stop.circle")
+                                    .font(.system(size: 100))
+                                    .foregroundStyle(.pink, .gray)
+                                    .padding(.bottom, 40)
+                                
+                            }
+                            
+                            
+                        }
+            }.onAppear(perform: {
+                self.audioRecorder.startRecording()
+            })
+            
+                
         
     }
     

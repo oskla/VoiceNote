@@ -14,11 +14,11 @@ class AllNotes: ObservableObject {
     
     init() {
         
-        addEntry(newNote: Note(noteTitle: "Titel", noteContent: "content", recording: "Recording"))
-        addEntry(newNote: Note(noteTitle: "Titel1", noteContent: "content2", recording: "Recording"))
-        addEntry(newNote: Note(noteTitle: "Titel2", noteContent: "content3", recording: "Recording"))
-        addEntry(newNote: Note(noteTitle: "Titel3", noteContent: "content4"))
-        addEntry(newNote: Note(noteTitle: "Titel4", noteContent: "content5", recording: "Recording"))
+        addEntry(newNote: Note(noteTitle: "Titel", noteContent: "content"))
+        addEntry(newNote: Note(noteTitle: "Titel2", noteContent: "content2"))
+        addEntry(newNote: Note(noteTitle: "Titel3", noteContent: "content3"))
+        addEntry(newNote: Note(noteTitle: "Titel4", noteContent: "content4"))
+        addEntry(newNote: Note(noteTitle: "Titel5", noteContent: "content5"))
         
     }
     
@@ -44,14 +44,29 @@ class AllNotes: ObservableObject {
             notes[index!].noteContent = note.noteContent
             
         }
-            
-
-         
+   
+    }
+    func getLatestRecording(audioRecorder: AudioRecorder, selectedNote: Note) -> Recording? {
+        guard let currentRecording = audioRecorder.recordings.last else {
+            print("failed")
+            return nil
+            }
+        
+        return currentRecording
     }
     func removeNote(at offsets: IndexSet) {
         notes.remove(atOffsets: offsets)
         
     }
+    
+    func addRecordingToMenu(selectedNote: Note) -> String {
+        if selectedNote.recording.isEmpty == false {
+            let noteCreatedAt: String = ("\(selectedNote.recording[0].createdAt)")
+            return noteCreatedAt
+        }
+       return "failed"
+    }
+       
         
  
     func getIndexByID(note: Note) -> [Note] {

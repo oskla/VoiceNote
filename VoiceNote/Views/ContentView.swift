@@ -10,7 +10,7 @@ import SwiftUI
 
 // TODO
 
-// - Move Voice recorder function intop popUp
+// - When recording inside EditNote - no new note in list should be added
 // - SearchBar in List
 // - Add index-number and add automatically to title
 // - Break out view from NewNote and EditNote and reuse that component in both
@@ -18,6 +18,8 @@ import SwiftUI
 
 // 1. Add Voicememo function - CHECK
 // 5. onDelete in NotesList - CHECK
+// Move Voice recorder function intop popUp - CHECK
+// - Add voice-name to subMenu inside EditNote
 
 struct ContentView: View {
     
@@ -26,17 +28,17 @@ struct ContentView: View {
     @State var showRecordPopup = false
     @State var showTabViewPopup = true
     @State var showEditTabView = true
+
     
     var body: some View {
         
         VStack {
             NotesHomeView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
-            if showRecordPopup {
-                RecordingView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
-            }
+         
             
             
         }.environmentObject(allNotes)
+            .environmentObject(audioRecorder)
     }
 }
 
@@ -56,6 +58,9 @@ struct NotesHomeView: View {
                 if showTabViewPopup {
                     CustomTabViewHome(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup)
                 }
+                if showRecordPopup {
+                    RecordingView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
+                }
                 
             }
             .background(Color.init(red: 245/255, green: 245/255, blue: 245/255))
@@ -69,6 +74,7 @@ struct NotesHomeView: View {
 struct NotesList: View {
     
     @EnvironmentObject var allNotes: AllNotes
+    @EnvironmentObject var audioRecorder: AudioRecorder
     @Binding var showRecordPopup: Bool
     @Binding var showEditTabView: Bool
     
@@ -81,9 +87,9 @@ struct NotesList: View {
                 ForEach(allNotes.getAllNotes()) {
                     note in
                     
-                    NavigationLink(destination: EditNoteView(showRecordPopup: $showRecordPopup, selectedNote: note, showEditTabVew: $showEditTabView)) {
+                    NavigationLink(destination: EditNoteView( showRecordPopup: $showRecordPopup, selectedNote: note, showEditTabVew: $showEditTabView)) {
                         
-                        ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent, recording: note.recording)
+                        ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent)
                             .listRowBackground(Color.init(red: 245/255, green: 245/255, blue: 245/255))
                         
                     }
@@ -135,6 +141,7 @@ struct NewNoteView: View {
     
     @State var noteContent = ""
     @State var noteTitle: String = "New note"
+    @State var selectedNewNote = Note(noteTitle: "New Note", noteContent: "")
     
     var body: some View {
         
@@ -150,19 +157,13 @@ struct NewNoteView: View {
                 .padding(.horizontal)
             
             
-            Button(action: {
-                allNotes.addEntry(newNote: Note(noteTitle: noteTitle, noteContent: noteContent, recording: "Recording"))
-                presentationMode.wrappedValue.dismiss()
-            }, label: {
-                Text("Save")
-            })
-            
-            
         }.navigationBarTitle("", displayMode: .inline)
-            .onAppear {
-                allNotes.addEntry(newNote: Note(noteTitle: noteTitle, noteContent: noteContent, recording: "Recording"))
+            .onDisappear {
+                
+                if noteTitle != "New note" || noteContent != "" {
+                    allNotes.addEntry(newNote: Note(noteTitle: noteTitle, noteContent: noteContent))
+                }
             }
-            .onChange(of: allNotes.notes.first!, perform: allNotes.editNote)
     }
 }
 
@@ -171,6 +172,7 @@ struct EditNoteView: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var allNotes: AllNotes
+    @EnvironmentObject var audioRecorder: AudioRecorder
     @Binding var showRecordPopup: Bool
     
     @State var selectedNote: Note
@@ -179,7 +181,12 @@ struct EditNoteView: View {
     var body: some View {
         
         VStack {
-            
+            Button(action: {
+//                allNotes.addRecordingToNote(audioRecorder: audioRecorder, selectedNote: selectedNote)
+                
+            }, label: {
+                Text("checka recordings")
+            })
             TextField("New recording", text: $selectedNote.noteTitle)
                 .font(.system(size: 30).bold())
                 .padding(.horizontal)
@@ -189,8 +196,13 @@ struct EditNoteView: View {
                 .background(.cyan)
                 .padding(.horizontal)
             
+            
             if showEditTabVew {
-                CustomTabViewNotes(showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew)
+                CustomTabViewNotes(showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
+            }
+
+            if showRecordPopup {
+                RecordingEditNoteView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
             }
            
             
@@ -202,9 +214,11 @@ struct EditNoteView: View {
 }
 
 struct CustomTabViewNotes: View {
+    @EnvironmentObject var allNotes: AllNotes
     @State private var sort: Int = 0
     @Binding var showRecordPopup: Bool
     @Binding var showEditTabView: Bool
+    @Binding var selectedNote: Note
     var body: some View {
         
         ZStack {
@@ -214,13 +228,13 @@ struct CustomTabViewNotes: View {
                 .ignoresSafeArea()
             
             HStack {
-                
+                Spacer()
                 // Add recordings here
                 Menu {
                     Button(action: {
-                        
+                       
                     }) {
-                        Label("Add", systemImage: "plus.circle")
+                        Label(allNotes.addRecordingToMenu(selectedNote: selectedNote), systemImage: "plus.circle")
                     }
                     Button(action: {
                         
@@ -242,16 +256,17 @@ struct CustomTabViewNotes: View {
                                  Button(action: {
                                      showRecordPopup = true
                                      showEditTabView = false
+                                     print(selectedNote)
                                  },
                                         label: {
                                      Label("", systemImage: "record.circle")
                                          .font(.system(size: 40))
-                                         .foregroundStyle(.black)
+                                         .foregroundStyle(.pink, .black)
                                          .navigationTitle("Voice notes")
                                  })
                                 
                 
-                
+                Spacer()
             }
             
         }
