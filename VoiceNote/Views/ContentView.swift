@@ -28,13 +28,13 @@ struct ContentView: View {
     @State var showRecordPopup = false
     @State var showTabViewPopup = true
     @State var showEditTabView = true
-
+    
     
     var body: some View {
         
         VStack {
             NotesHomeView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
-         
+            
             
             
         }.environmentObject(allNotes)
@@ -64,6 +64,13 @@ struct NotesHomeView: View {
                 
             }
             .background(Color.init(red: 245/255, green: 245/255, blue: 245/255))
+            .onAppear{
+                showTabViewPopup = true
+                
+                print(allNotes.notes)
+                print(audioRecorder.recordings)
+                
+            }
         }
     }
 }
@@ -86,7 +93,7 @@ struct NotesList: View {
                 
                 ForEach(allNotes.getAllNotes()) {
                     note in
-                    
+                  
                     NavigationLink(destination: EditNoteView( showRecordPopup: $showRecordPopup, selectedNote: note, showEditTabVew: $showEditTabView)) {
                         
                         ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent)
@@ -181,12 +188,7 @@ struct EditNoteView: View {
     var body: some View {
         
         VStack {
-            Button(action: {
-//                allNotes.addRecordingToNote(audioRecorder: audioRecorder, selectedNote: selectedNote)
-                
-            }, label: {
-                Text("checka recordings")
-            })
+            
             TextField("New recording", text: $selectedNote.noteTitle)
                 .font(.system(size: 30).bold())
                 .padding(.horizontal)
@@ -196,24 +198,28 @@ struct EditNoteView: View {
                 .background(.cyan)
                 .padding(.horizontal)
             
+            RecordingsList(audioRecorder: audioRecorder, selectedNote: $selectedNote)
             
             if showEditTabVew {
-                CustomTabViewNotes(showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
+                CustomTabViewNotes(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
             }
-
+            
             if showRecordPopup {
                 RecordingEditNoteView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
             }
-           
+            
             
         }.navigationBarTitle("", displayMode: .inline)
             .onChange(of: selectedNote, perform: allNotes.editNote)
+          
+           
         
     }
     
 }
 
 struct CustomTabViewNotes: View {
+    @ObservedObject var audioRecorder: AudioRecorder
     @EnvironmentObject var allNotes: AllNotes
     @State private var sort: Int = 0
     @Binding var showRecordPopup: Bool
@@ -229,42 +235,28 @@ struct CustomTabViewNotes: View {
             
             HStack {
                 Spacer()
-                // Add recordings here
+                
                 Menu {
-                    Button(action: {
-                       
-                    }) {
-                        Label(allNotes.addRecordingToMenu(selectedNote: selectedNote), systemImage: "plus.circle")
-                    }
-                    Button(action: {
-                        
-                    }) {
-                        Label("Delete", systemImage: "minus.circle")
-                    }
-                    Button(action: {
-                        
-                    }) {
-                        Label("Edit", systemImage: "pencil.circle")
-                    }
+                    RecordingMenu(audioRecorder: audioRecorder, selectedNote: $selectedNote)
                 } label: {
                     Image(systemName: "play.fill")
                 }.font(.system(size: 40))
                     .foregroundStyle(.black)
                 
                 Spacer()
-                        
-                                 Button(action: {
-                                     showRecordPopup = true
-                                     showEditTabView = false
-                                     print(selectedNote)
-                                 },
-                                        label: {
-                                     Label("", systemImage: "record.circle")
-                                         .font(.system(size: 40))
-                                         .foregroundStyle(.pink, .black)
-                                         .navigationTitle("Voice notes")
-                                 })
-                                
+                
+                Button(action: {
+                    showRecordPopup = true
+                    showEditTabView = false
+                    print(selectedNote)
+                },
+                       label: {
+                    Label("", systemImage: "record.circle")
+                        .font(.system(size: 40))
+                        .foregroundStyle(.pink, .black)
+                        .navigationTitle("Voice notes")
+                })
+                
                 
                 Spacer()
             }
@@ -285,7 +277,6 @@ struct CustomTabViewHome: View {
             Rectangle()
                 .foregroundColor(Color.init(red: 245/255, green: 245/255, blue: 245/255))
                 .ignoresSafeArea()
-            //  .frame(height: 70)
             
             
             HStack {
@@ -297,7 +288,9 @@ struct CustomTabViewHome: View {
                     
                     
                 })
+                
                 Spacer()
+                
                 Button(action: {
                     showRecordPopup = true
                 },

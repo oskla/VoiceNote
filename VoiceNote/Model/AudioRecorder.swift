@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 import AVFoundation
 
-class AudioRecorder: NSObject, ObservableObject {
+class AudioRecorder: NSObject, ObservableObject, Identifiable {
     
     override init() {
         super.init()
@@ -27,7 +27,9 @@ class AudioRecorder: NSObject, ObservableObject {
         }
     }
     
-    
+    func getAllRecordings() -> [Recording] {
+        return recordings
+    }
     
     func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
@@ -69,7 +71,7 @@ class AudioRecorder: NSObject, ObservableObject {
     func fetchRecordings() {
         
         
-        recordings.removeAll()
+       // recordings.removeAll()
         
         let fileManager = FileManager.default
         let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -78,12 +80,35 @@ class AudioRecorder: NSObject, ObservableObject {
         for audio in directoryContents {
             let recording = Recording(fileURL: audio, createdAt: getCreationDate(for: audio))
             
+
+           let dbAudioCreationDate = getCreationDate(for: audio).toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
+            let arrayAudioCreationDate = recording.createdAt.toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
+            
+//            print("db creation date: \(dbAudioCreationDate)")
+//
+//
+//            let filtered = getAllRecordings().filter {
+//                $0.createdAt.toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss") == dbAudioCreationDate
+//            }
+//            print("filtered \(filtered)")
+//            let filteredFirst = filtered.first
+//
+//            if let filteredFirst = filteredFirst {
+//                recordings.append(filteredFirst)
+//            }
+            
             recordings.append(recording)
             
            _ = recordings.sorted(by: {$0.createdAt.compare($1.createdAt) == .orderedAscending})
             objectWillChange.send(self)
         }
         
+        
+    }
+    
+    func addIdToRecording(selectedNote: Note, recording: Recording) {
+        
+       //   recording.belongsToNoteId = selectedNote.id
         
     }
     
