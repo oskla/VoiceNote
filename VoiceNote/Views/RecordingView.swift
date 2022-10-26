@@ -23,7 +23,7 @@ struct RecordingView: View {
               //  RecordingsList(audioRecorder: audioRecorder)
   
                         if audioRecorder.recording == false {
-                            Button(action: {self.audioRecorder.startRecording()}) {
+                            Button(action: {self.audioRecorder.startRecording2()}) {
                                 
                                 Image(systemName: "record.circle")
                                     .font(.system(size: 100))
@@ -48,7 +48,7 @@ struct RecordingView: View {
                             
                         }
             }.onAppear(perform: {
-                self.audioRecorder.startRecording()
+                self.audioRecorder.startRecording2()
                 showTabViewPopup = false
             })
                 
@@ -64,6 +64,7 @@ struct RecordingEditNoteView: View {
     @Binding var showRecordPopup: Bool
     @Binding var showEditTabView: Bool
     @Binding var selectedNote: Note
+ 
     
     var body: some View {
 
@@ -71,7 +72,7 @@ struct RecordingEditNoteView: View {
   
                         if audioRecorder.recording == false {
                             // Play-button (never shows?)
-                            Button(action: {self.audioRecorder.startRecording()}) {
+                            Button(action: { self.audioRecorder.startRecording2() }) {
                                 
                                 Image(systemName: "record.circle")
                                     .font(.system(size: 100))
@@ -107,7 +108,7 @@ struct RecordingEditNoteView: View {
                             }
                         }
             }.onAppear(perform: {
-                self.audioRecorder.startRecording()
+                self.audioRecorder.startRecording2()
             })
             .onDisappear {
                // print("Selected note from disappear Recording view: \(selectedNote)")

@@ -27,7 +27,7 @@ struct ContentView: View {
     
     // Singleton. Will always refer to the same instance
     var db = Firestore.firestore()
-    let storageRef = Storage.storage().reference()
+    
     
     @StateObject var allNotes = AllNotes()
     @ObservedObject var audioRecorder: AudioRecorder
@@ -58,18 +58,14 @@ struct NotesHomeView: View {
     @Binding var showRecordPopup: Bool
     @Binding var showTabViewPopup: Bool
     @Binding var showEditTabView: Bool
-    
+
     
     var body: some View {
+        
         NavigationView {
             VStack {
                 NotesList(showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabView)
                 
-                Button(action: {
-//                    db.collection("test2").addDocument(data: [audioRecorder.recordings: "Oskar"])
-                }, label: {
-                    Text("Add to firestore")
-                })
                 
                 if showTabViewPopup {
                     CustomTabViewHome(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup)

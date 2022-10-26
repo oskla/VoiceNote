@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 import Combine
 import AVFoundation
+import FirebaseStorage
 
 class AudioRecorder: NSObject, ObservableObject, Identifiable {
     
@@ -17,6 +18,7 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
         fetchRecordings()
     }
     
+    var audioFileUrl3: URL?
     let objectWillChange = PassthroughSubject<AudioRecorder, Never>()
     var audioRecorder: AVAudioRecorder!
     var recordings = [Recording]()
@@ -31,16 +33,46 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
         return recordings
     }
     
-    func addToFirebaseStorage(documentPath: String) {
-        let localFile = URL(string: documentPath)
+   
+    func handleAudioSendWith(url: String, completion:@escaping((String?) -> () )) {
+        guard let fileUrl = URL(string: url) else {
+            return
+        }
+        
+        let dateString = Date().toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
+        let fileName = NSUUID().uuidString + dateString + ".m4a"
+        let storageRef = Storage.storage().reference().child("recordings")
 
-        print("Local file: \(localFile)")
+        storageRef.child(fileName).putFile(from: fileUrl, metadata: nil) { (metadata, error) in
+            if error != nil {
+                print(error ?? "error")
+            }
+            
+            storageRef.downloadURL { (url, error) in
+                guard let urlStr = url else {
+                    completion(nil)
+                    return }
+                
+                let urlFinal = (urlStr.absoluteString)
+                self.audioFileUrl3 = urlStr
+                completion(urlFinal)
+                
+            }
+            
 
+//            if let downloadUrl = metadata?.downloadURL()?.absoluteString {
+//                print(downloadUrl)
+//                let values: [String : Any] = ["audioUrl": downloadUrl]
+//                self.sendMessageWith(properties: values)
+//            }
+        }
     }
     
-    func startRecording() {
+    
+    func startRecording2() {
+      
         let recordingSession = AVAudioSession.sharedInstance()
-        
+        let audioFileUrl2 = getAudioFileURL()
         do {
             try recordingSession.setCategory(.playAndRecord, mode: .default)
             try recordingSession.setActive(true)
@@ -48,40 +80,97 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
             print("Failed to start recording")
         }
         
-        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let audioFilename = documentPath.appendingPathComponent("\(Date().toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")).m4a")
         let settings = [
-                   AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
-                   AVSampleRateKey: 12000,
-                   AVNumberOfChannelsKey: 1,
-                   AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
-               ]
-        print("DocumentPath: \(documentPath)")
-        var documentPathString: String = "\(documentPath)"
-        
-        addToFirebaseStorage(documentPath: documentPathString)
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey: 12000,
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ]
+
         do {
-           // audioRecorder = try AVAudioRecorder(url: <#T##URL#>, settings: <#T##[String : Any]#>)
-            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
+           
+            audioRecorder = try AVAudioRecorder(url: audioFileUrl2, settings: settings)
             audioRecorder.record()
+        
             recording = true
+            
         } catch {
             print("Could not start recording")
         }
+
+        audioFileUrl3 = audioFileUrl2
     }
     
+    
+    func getAudioFileURL() -> URL {
+        return getDocumentsDirectory().appendingPathComponent("\(NSUUID().uuidString).m4a")
+    }
+
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+
+  
+    
     func stopRecording() {
+
         audioRecorder.stop()
         recording = false
         
-        fetchRecordings()
+        guard let audioFileUrl3 = audioFileUrl3 else {
+           print("audioFileUrl3 was empty")
+            return
+        }
+
+        // Upload to Firebase Storage
+        handleAudioSendWith(url: "\(audioFileUrl3)", completion: {_ in 
+            self.deleteAsync()
+        })
+       // deleteAsync()
+
+    }
+    func deleteAsync(){
+        guard audioFileUrl3 != nil else {
+            print("audioFileUrl3 was empty")
+            return
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            
+            print("file to delete: \(self.audioFileUrl3!)")
+            self.deleteFiles("\(self.audioFileUrl3!)")
+        }
+
+       // perform(#selector (self.deleteFiles("\(self.audioFileUrl3)")), with: nil, afterDelay: 5)
+        
+//        Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) {
+//            _ in
+//            self.deleteFiles("\(self.audioFileUrl3)")
+//        }
+            
+       
     }
     
-   
-    
+    func deleteFiles(_ fileToDelete: String) {
+            let fName = fileToDelete.getFileName()
+            let fExtension = fileToDelete.getFileExtension()
+            
+            let fURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            
+            let deleteAtURL = fURL.appendingPathComponent(fName).appendingPathExtension(fExtension)
+            
+            do {
+                try FileManager.default.removeItem(at: deleteAtURL)
+                print("Image has been deleted")
+            } catch {
+                print(error)
+            }
+        }
     
     func fetchRecordings() {
-        
         
         recordings.removeAll()
         
@@ -91,23 +180,6 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
         
         for audio in directoryContents {
             let recording = Recording(fileURL: audio, createdAt: getCreationDate(for: audio))
-            
-
-         //  let dbAudioCreationDate = getCreationDate(for: audio).toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
-          //  let arrayAudioCreationDate = recording.createdAt.toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
-            
-//            print("db creation date: \(dbAudioCreationDate)")
-//
-//
-//            let filtered = getAllRecordings().filter {
-//                $0.createdAt.toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss") == dbAudioCreationDate
-//            }
-//            print("filtered \(filtered)")
-//            let filteredFirst = filtered.first
-//
-//            if let filteredFirst = filteredFirst {
-//                recordings.append(filteredFirst)
-//            }
             
             recordings.append(recording)
             
