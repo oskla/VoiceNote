@@ -110,8 +110,8 @@ struct RecordingEditNoteView: View {
                 self.audioRecorder.startRecording()
             })
             .onDisappear {
-                print("Selected note from disappear Recording view: \(selectedNote)")
-                print("Selected note from disappear Recording view: \(selectedNote.recording)")
+               // print("Selected note from disappear Recording view: \(selectedNote)")
+              //  print("Selected note from disappear Recording view: \(selectedNote.recording)")
                 
             }
     }

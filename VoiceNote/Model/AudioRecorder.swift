@@ -31,6 +31,13 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
         return recordings
     }
     
+    func addToFirebaseStorage(documentPath: String) {
+        let localFile = URL(string: documentPath)
+
+        print("Local file: \(localFile)")
+
+    }
+    
     func startRecording() {
         let recordingSession = AVAudioSession.sharedInstance()
         
@@ -49,7 +56,12 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
                    AVNumberOfChannelsKey: 1,
                    AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
                ]
+        print("DocumentPath: \(documentPath)")
+        var documentPathString: String = "\(documentPath)"
+        
+        addToFirebaseStorage(documentPath: documentPathString)
         do {
+           // audioRecorder = try AVAudioRecorder(url: <#T##URL#>, settings: <#T##[String : Any]#>)
             audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
             audioRecorder.record()
             recording = true
@@ -71,7 +83,7 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
     func fetchRecordings() {
         
         
-       // recordings.removeAll()
+        recordings.removeAll()
         
         let fileManager = FileManager.default
         let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -81,8 +93,8 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
             let recording = Recording(fileURL: audio, createdAt: getCreationDate(for: audio))
             
 
-           let dbAudioCreationDate = getCreationDate(for: audio).toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
-            let arrayAudioCreationDate = recording.createdAt.toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
+         //  let dbAudioCreationDate = getCreationDate(for: audio).toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
+          //  let arrayAudioCreationDate = recording.createdAt.toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
             
 //            print("db creation date: \(dbAudioCreationDate)")
 //

@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import FirebaseFirestoreSwift
 
-struct Recording: Decodable, Encodable, Equatable, Identifiable {
+struct Recording: Decodable, Encodable, Equatable {
    
-    var id: UUID?
+
     let fileURL: URL
     let createdAt: Date
     var belongsToNoteId: UUID?

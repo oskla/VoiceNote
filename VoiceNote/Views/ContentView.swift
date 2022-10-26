@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseStorage
 
 
 // TODO
@@ -23,12 +25,19 @@ import SwiftUI
 
 struct ContentView: View {
     
+    // Singleton. Will always refer to the same instance
+    var db = Firestore.firestore()
+    let storageRef = Storage.storage().reference()
+    
     @StateObject var allNotes = AllNotes()
     @ObservedObject var audioRecorder: AudioRecorder
     @State var showRecordPopup = false
     @State var showTabViewPopup = true
     @State var showEditTabView = true
     
+//    func addToDb() {
+//        
+//    }
     
     var body: some View {
         
@@ -43,7 +52,7 @@ struct ContentView: View {
 }
 
 struct NotesHomeView: View {
-    
+    var db = Firestore.firestore()
     @EnvironmentObject var allNotes: AllNotes
     @ObservedObject var audioRecorder: AudioRecorder
     @Binding var showRecordPopup: Bool
@@ -55,6 +64,13 @@ struct NotesHomeView: View {
         NavigationView {
             VStack {
                 NotesList(showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabView)
+                
+                Button(action: {
+//                    db.collection("test2").addDocument(data: [audioRecorder.recordings: "Oskar"])
+                }, label: {
+                    Text("Add to firestore")
+                })
+                
                 if showTabViewPopup {
                     CustomTabViewHome(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup)
                 }
@@ -67,8 +83,8 @@ struct NotesHomeView: View {
             .onAppear{
                 showTabViewPopup = true
                 
-                print(allNotes.notes)
-                print(audioRecorder.recordings)
+             //   print(allNotes.notes)
+               // print(audioRecorder.recordings)
                 
             }
         }
@@ -248,7 +264,7 @@ struct CustomTabViewNotes: View {
                 Button(action: {
                     showRecordPopup = true
                     showEditTabView = false
-                    print(selectedNote)
+                   // print(selectedNote)
                 },
                        label: {
                     Label("", systemImage: "record.circle")
@@ -320,10 +336,10 @@ struct CustomTabViewHome: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        // ContentView(audioRecorder: AudioRecorder()).environmentObject(AllNotes())
+         ContentView(audioRecorder: AudioRecorder()).environmentObject(AllNotes())
         //    .previewDevice("iPhone 13 Pro")
         //  NewNoteView().environmentObject(AllNotes())
-        EditNoteView(showRecordPopup: .constant(true), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(true)).environmentObject(AllNotes())
+       // EditNoteView(showRecordPopup: .constant(true), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(true)).environmentObject(AllNotes())
         // NotesList().environmentObject(AllNotes())
         // RecordingView(audioRecorder: AudioRecorder())
     }
