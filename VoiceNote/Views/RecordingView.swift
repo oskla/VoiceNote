@@ -32,7 +32,7 @@ struct RecordingView: View {
                             }
                         } else {
                             Button(action: {
-                                self.audioRecorder.stopRecording()
+                                self.audioRecorder.stopRecording(mapId: nil)
                                 allNotes.addEntry(newNote: Note(noteTitle: "new recording", noteContent: ""))
                                 showRecordPopup = false
                                 showTabViewPopup = true
@@ -83,7 +83,7 @@ struct RecordingEditNoteView: View {
                         } else {
                             // STOP-Button
                             Button(action: {
-                                self.audioRecorder.stopRecording()
+                                self.audioRecorder.stopRecording(mapId: selectedNote.id)
                                 
                                 allNotes.addEntry(newNote: Note(noteTitle: "new recording", noteContent: ""))
                                 

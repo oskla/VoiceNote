@@ -18,7 +18,7 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
         fetchRecordings()
     }
     
-    var audioFileUrl3: URL?
+    var audioFileUrl: URL?
     let objectWillChange = PassthroughSubject<AudioRecorder, Never>()
     var audioRecorder: AVAudioRecorder!
     var recordings = [Recording]()
@@ -34,14 +34,18 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
     }
     
    
-    func handleAudioSendWith(url: String, completion:@escaping((String?) -> () )) {
+    func handleAudioSendWith(url: String, mapId: UUID?, completion:@escaping((String?) -> () )) {
+       
+        let mapIdString = idToString(uuid: mapId)
+
+        
         guard let fileUrl = URL(string: url) else {
             return
         }
         
         let dateString = Date().toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
         let fileName = NSUUID().uuidString + dateString + ".m4a"
-        let storageRef = Storage.storage().reference().child("recordings")
+        let storageRef = Storage.storage().reference().child(mapIdString ?? "recordings")
 
         storageRef.child(fileName).putFile(from: fileUrl, metadata: nil) { (metadata, error) in
             if error != nil {
@@ -54,17 +58,11 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
                     return }
                 
                 let urlFinal = (urlStr.absoluteString)
-                self.audioFileUrl3 = urlStr
+                self.audioFileUrl = urlStr
                 completion(urlFinal)
                 
             }
-            
 
-//            if let downloadUrl = metadata?.downloadURL()?.absoluteString {
-//                print(downloadUrl)
-//                let values: [String : Any] = ["audioUrl": downloadUrl]
-//                self.sendMessageWith(properties: values)
-//            }
         }
     }
     
@@ -72,7 +70,7 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
     func startRecording2() {
       
         let recordingSession = AVAudioSession.sharedInstance()
-        let audioFileUrl2 = getAudioFileURL()
+        let tempAudioFileUrl2 = getAudioFileURL()
         do {
             try recordingSession.setCategory(.playAndRecord, mode: .default)
             try recordingSession.setActive(true)
@@ -89,7 +87,7 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
 
         do {
            
-            audioRecorder = try AVAudioRecorder(url: audioFileUrl2, settings: settings)
+            audioRecorder = try AVAudioRecorder(url: tempAudioFileUrl2, settings: settings)
             audioRecorder.record()
         
             recording = true
@@ -98,7 +96,7 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
             print("Could not start recording")
         }
 
-        audioFileUrl3 = audioFileUrl2
+        audioFileUrl = tempAudioFileUrl2
     }
     
     
@@ -115,44 +113,24 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
 
   
     
-    func stopRecording() {
+    func stopRecording(mapId: UUID?) {
 
         audioRecorder.stop()
         recording = false
         
-        guard let audioFileUrl3 = audioFileUrl3 else {
-           print("audioFileUrl3 was empty")
+        guard let audioFileUrl = audioFileUrl else {
+           print("audioFileUrl was empty")
             return
         }
 
-        // Upload to Firebase Storage
-        handleAudioSendWith(url: "\(audioFileUrl3)", completion: {_ in 
-            self.deleteAsync()
+        // Upload to Firebase Storage - when complete delete from phone
+        handleAudioSendWith(url: "\(audioFileUrl)", mapId: mapId, completion: {_ in
+            self.deleteFiles("\(audioFileUrl)")
         })
-       // deleteAsync()
+
 
     }
-    func deleteAsync(){
-        guard audioFileUrl3 != nil else {
-            print("audioFileUrl3 was empty")
-            return
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            
-            print("file to delete: \(self.audioFileUrl3!)")
-            self.deleteFiles("\(self.audioFileUrl3!)")
-        }
 
-       // perform(#selector (self.deleteFiles("\(self.audioFileUrl3)")), with: nil, afterDelay: 5)
-        
-//        Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) {
-//            _ in
-//            self.deleteFiles("\(self.audioFileUrl3)")
-//        }
-            
-       
-    }
     
     func deleteFiles(_ fileToDelete: String) {
             let fName = fileToDelete.getFileName()
@@ -164,7 +142,7 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
             
             do {
                 try FileManager.default.removeItem(at: deleteAtURL)
-                print("Image has been deleted")
+                print("Recording has been deleted")
             } catch {
                 print(error)
             }
@@ -186,14 +164,5 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
            _ = recordings.sorted(by: {$0.createdAt.compare($1.createdAt) == .orderedAscending})
             objectWillChange.send(self)
         }
-        
-        
     }
-    
-    func addIdToRecording(selectedNote: Note, recording: Recording) {
-        
-       //   recording.belongsToNoteId = selectedNote.id
-        
-    }
-    
 }

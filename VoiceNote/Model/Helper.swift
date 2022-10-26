@@ -16,4 +16,11 @@ func getCreationDate(for file: URL) -> Date {
     }
 }
 
+func idToString(uuid: UUID?) -> String? {
+    guard let uuid = uuid else {
+        return nil
+    }
+
+    return uuid.uuidString
+}
 

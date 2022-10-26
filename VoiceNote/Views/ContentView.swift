@@ -12,6 +12,7 @@ import FirebaseStorage
 
 // TODO
 
+// - Fetch recordings from Firebase (to show accurate information inside editNote)
 // - When recording inside EditNote - no new note in list should be added
 // - SearchBar in List
 // - Add index-number and add automatically to title
@@ -316,8 +317,6 @@ struct CustomTabViewHome: View {
                 
             }
             
-            
-            
         }
         .background(.gray)
         .frame(height: 70)
@@ -332,10 +331,10 @@ struct CustomTabViewHome: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-         ContentView(audioRecorder: AudioRecorder()).environmentObject(AllNotes())
+        // ContentView(audioRecorder: AudioRecorder()).environmentObject(AllNotes())
         //    .previewDevice("iPhone 13 Pro")
         //  NewNoteView().environmentObject(AllNotes())
-       // EditNoteView(showRecordPopup: .constant(true), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(true)).environmentObject(AllNotes())
+        EditNoteView(showRecordPopup: .constant(true), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(true)).environmentObject(AllNotes()).environmentObject(AudioRecorder())
         // NotesList().environmentObject(AllNotes())
         // RecordingView(audioRecorder: AudioRecorder())
     }
