@@ -15,6 +15,7 @@ struct RecordingView: View {
     @Binding var showEditTabView: Bool
     
     @EnvironmentObject var allNotes: AllNotes
+    @EnvironmentObject var firestoreConnection: FirestoreConnection
     var body: some View {
        
        // NavigationView {
@@ -32,7 +33,7 @@ struct RecordingView: View {
                             }
                         } else {
                             Button(action: {
-                                self.audioRecorder.stopRecording(mapId: nil)
+                                self.audioRecorder.stopRecording(db: firestoreConnection)
                                 allNotes.addEntry(newNote: Note(noteTitle: "new recording", noteContent: ""))
                                 showRecordPopup = false
                                 showTabViewPopup = true
@@ -60,6 +61,7 @@ struct RecordingView: View {
 struct RecordingEditNoteView: View {
     @ObservedObject var audioRecorder: AudioRecorder
     @EnvironmentObject var allNotes: AllNotes
+    @EnvironmentObject var firestoreConnection: FirestoreConnection
     
     @Binding var showRecordPopup: Bool
     @Binding var showEditTabView: Bool
@@ -83,7 +85,7 @@ struct RecordingEditNoteView: View {
                         } else {
                             // STOP-Button
                             Button(action: {
-                                self.audioRecorder.stopRecording(mapId: selectedNote.id)
+                                self.audioRecorder.stopRecording(db: firestoreConnection)
                                 
                                 allNotes.addEntry(newNote: Note(noteTitle: "new recording", noteContent: ""))
                                 

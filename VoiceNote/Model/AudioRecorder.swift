@@ -10,14 +10,16 @@ import SwiftUI
 import Combine
 import AVFoundation
 import FirebaseStorage
+import FirebaseFirestore
 
 class AudioRecorder: NSObject, ObservableObject, Identifiable {
     
     override init() {
         super.init()
-        fetchRecordings()
+        //fetchRecordings()
     }
     
+    let firestoreConnection = FirestoreConnection()
     var audioFileUrl: URL?
     let objectWillChange = PassthroughSubject<AudioRecorder, Never>()
     var audioRecorder: AVAudioRecorder!
@@ -29,43 +31,13 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
         }
     }
     
-    func getAllRecordings() -> [Recording] {
-        return recordings
-    }
+//    func getAllRecordings() -> [Recording] {
+//        return recordings
+//    }
     
    
-    func handleAudioSendWith(url: String, mapId: UUID?, completion:@escaping((String?) -> () )) {
-       
-        let mapIdString = idToString(uuid: mapId)
 
-        
-        guard let fileUrl = URL(string: url) else {
-            return
-        }
-        
-        let dateString = Date().toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
-        let fileName = NSUUID().uuidString + dateString + ".m4a"
-        let storageRef = Storage.storage().reference().child(mapIdString ?? "recordings")
-
-        storageRef.child(fileName).putFile(from: fileUrl, metadata: nil) { (metadata, error) in
-            if error != nil {
-                print(error ?? "error")
-            }
-            
-            storageRef.downloadURL { (url, error) in
-                guard let urlStr = url else {
-                    completion(nil)
-                    return }
-                
-                let urlFinal = (urlStr.absoluteString)
-                self.audioFileUrl = urlStr
-                completion(urlFinal)
-                
-            }
-
-        }
-    }
-    
+    // RECORDING LOGIC
     
     func startRecording2() {
       
@@ -100,6 +72,30 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
     }
     
     
+    
+    
+    func stopRecording(db: FirestoreConnection) {
+
+        audioRecorder.stop()
+        recording = false
+        
+        guard let audioFileUrl = audioFileUrl else {
+           print("audioFileUrl was empty")
+            return
+        }
+
+        // Upload to Firebase Storage - when complete delete from phone
+       let path = handleAudioSendWith(db: db, url: "\(audioFileUrl)", completion: {_ in
+            self.deleteFiles("\(audioFileUrl)")
+           
+        })
+        
+        db.addRecordingToDb(urlPath: path)
+    }
+    
+    
+    // LOCAL STORAGE
+    
     func getAudioFileURL() -> URL {
         return getDocumentsDirectory().appendingPathComponent("\(NSUUID().uuidString).m4a")
     }
@@ -111,25 +107,52 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
         return documentsDirectory
     }
 
-  
     
-    func stopRecording(mapId: UUID?) {
-
-        audioRecorder.stop()
-        recording = false
+    
+    /// FIREBASE STORAGE
+  
+    func handleAudioSendWith(db: FirestoreConnection, url: String, completion:@escaping((String?) -> () ) ) -> String {
+       
+     //   let mapIdString = idToString(uuid: mapId)
+        @EnvironmentObject var firestoreConnection: FirestoreConnection
         
-        guard let audioFileUrl = audioFileUrl else {
-           print("audioFileUrl was empty")
-            return
+        guard let fileUrl = URL(string: url) else {
+            return ""
         }
+        
+        let dateString = Date().toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
+        let fileName = NSUUID().uuidString + dateString + ".m4a"
+        let storageRef = Storage.storage().reference().child("recordings")
+        
+        let path = "recordings/\(fileName)"
 
-        // Upload to Firebase Storage - when complete delete from phone
-        handleAudioSendWith(url: "\(audioFileUrl)", mapId: mapId, completion: {_ in
-            self.deleteFiles("\(audioFileUrl)")
-        })
+        storageRef.child(fileName).putFile(from: fileUrl, metadata: nil) { (metadata, error) in
+            if error != nil {
+                print(error ?? "error")
+            }
+            
+            if error == nil {
+                
+              //  db.addRecordingToDb(urlPath: path)
+                
+            }
+            
+            storageRef.downloadURL { (url, error) in
+                guard let urlStr = url else {
+                    completion(nil)
+                    return }
+                
+                let urlFinal = (urlStr.absoluteString)
+                self.audioFileUrl = urlStr
+                completion(urlFinal)
+                
+            }
 
-
+        }
+        
+        return path
     }
+
 
     
     func deleteFiles(_ fileToDelete: String) {
@@ -148,21 +171,26 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
             }
         }
     
-    func fetchRecordings() {
-        
-        recordings.removeAll()
-        
-        let fileManager = FileManager.default
-        let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let directoryContents = try! fileManager.contentsOfDirectory(at: documentDirectory, includingPropertiesForKeys: nil)
-        
-        for audio in directoryContents {
-            let recording = Recording(fileURL: audio, createdAt: getCreationDate(for: audio))
-            
-            recordings.append(recording)
-            
-           _ = recordings.sorted(by: {$0.createdAt.compare($1.createdAt) == .orderedAscending})
-            objectWillChange.send(self)
-        }
-    }
+    
+    
+    
+    
+    
+//    func fetchRecordings() {
+//
+//        recordings.removeAll()
+//
+//        let fileManager = FileManager.default
+//        let documentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+//        let directoryContents = try! fileManager.contentsOfDirectory(at: documentDirectory, includingPropertiesForKeys: nil)
+//
+//        for audio in directoryContents {
+//            let recording = Recording(fileURL: audio, createdAt: getCreationDate(for: audio))
+//
+//            recordings.append(recording)
+//
+//           _ = recordings.sorted(by: {$0.createdAt.compare($1.createdAt) == .orderedAscending})
+//            objectWillChange.send(self)
+//        }
+//    }
 }

@@ -28,7 +28,7 @@ struct ContentView: View {
     
     // Singleton. Will always refer to the same instance
     var db = Firestore.firestore()
-    
+    @StateObject var firestoreConnection = FirestoreConnection()
     
     @StateObject var allNotes = AllNotes()
     @ObservedObject var audioRecorder: AudioRecorder
@@ -36,19 +36,26 @@ struct ContentView: View {
     @State var showTabViewPopup = true
     @State var showEditTabView = true
     
-//    func addToDb() {
-//        
-//    }
+
     
     var body: some View {
+        
+        NavigationView {
+            
         
         VStack {
             NotesHomeView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
             
-            
+            NavigationLink(destination: LoginView(firestoreConnection: firestoreConnection), label: {
+                Text("Register")
+            }).padding().foregroundColor(.blue)
             
         }.environmentObject(allNotes)
             .environmentObject(audioRecorder)
+            .environmentObject(firestoreConnection)
+            
+            
+        }
     }
 }
 
@@ -331,10 +338,10 @@ struct CustomTabViewHome: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        // ContentView(audioRecorder: AudioRecorder()).environmentObject(AllNotes())
+         ContentView(audioRecorder: AudioRecorder()).environmentObject(AllNotes())
         //    .previewDevice("iPhone 13 Pro")
         //  NewNoteView().environmentObject(AllNotes())
-        EditNoteView(showRecordPopup: .constant(true), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(true)).environmentObject(AllNotes()).environmentObject(AudioRecorder())
+       // EditNoteView(showRecordPopup: .constant(true), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(true)).environmentObject(AllNotes()).environmentObject(AudioRecorder())
         // NotesList().environmentObject(AllNotes())
         // RecordingView(audioRecorder: AudioRecorder())
     }

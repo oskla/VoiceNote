@@ -21,6 +21,9 @@
 		387156DC29091B0B00A0E01B /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 387156DB29091B0B00A0E01B /* FirebaseStorage */; };
 		387156DE29092BA000A0E01B /* techlove_logo-03 (1).png in Resources */ = {isa = PBXBuildFile; fileRef = 387156DD29092BA000A0E01B /* techlove_logo-03 (1).png */; };
 		387156E0290930FD00A0E01B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 387156DF290930FD00A0E01B /* GoogleService-Info.plist */; };
+		388785BD290A74B700ACD948 /* FirebaseStorageConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388785BC290A74B700ACD948 /* FirebaseStorageConnection.swift */; };
+		388785BF290A793000ACD948 /* FirestoreConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388785BE290A793000ACD948 /* FirestoreConnection.swift */; };
+		388785C1290A7CE600ACD948 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388785C0290A7CE600ACD948 /* LoginView.swift */; };
 		388A275F28F823500019C70D /* VoiceNoteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A275E28F823500019C70D /* VoiceNoteApp.swift */; };
 		388A276128F823500019C70D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A276028F823500019C70D /* ContentView.swift */; };
 		388A276328F823530019C70D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 388A276228F823530019C70D /* Assets.xcassets */; };
@@ -30,7 +33,8 @@
 		388A277C28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A277B28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift */; };
 		388A278928F8240E0019C70D /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A278828F8240E0019C70D /* Note.swift */; };
 		388A278B28F825180019C70D /* AllNotes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A278A28F825180019C70D /* AllNotes.swift */; };
-		38C3A5DB2907DF3700B4AADA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 38C3A5DA2907DF3700B4AADA /* GoogleService-Info.plist */; };
+		38BFFC15290A8999007614D2 /* UserDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BFFC14290A8999007614D2 /* UserDocument.swift */; };
+		38BFFC17290A8F48007614D2 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BFFC16290A8F48007614D2 /* RegisterView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +64,9 @@
 		386731F028FDD6C400BA0F3D /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
 		387156DD29092BA000A0E01B /* techlove_logo-03 (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "techlove_logo-03 (1).png"; sourceTree = "<group>"; };
 		387156DF290930FD00A0E01B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		388785BC290A74B700ACD948 /* FirebaseStorageConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageConnection.swift; sourceTree = "<group>"; };
+		388785BE290A793000ACD948 /* FirestoreConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreConnection.swift; sourceTree = "<group>"; };
+		388785C0290A7CE600ACD948 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		388A275B28F823500019C70D /* VoiceNote.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VoiceNote.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		388A275E28F823500019C70D /* VoiceNoteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteApp.swift; sourceTree = "<group>"; };
 		388A276028F823500019C70D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -72,7 +79,8 @@
 		388A277B28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		388A278828F8240E0019C70D /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		388A278A28F825180019C70D /* AllNotes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllNotes.swift; sourceTree = "<group>"; };
-		38C3A5DA2907DF3700B4AADA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		38BFFC14290A8999007614D2 /* UserDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDocument.swift; sourceTree = "<group>"; };
+		38BFFC16290A8F48007614D2 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +122,7 @@
 				386731E628FDBED500BA0F3D /* AudioRecorder.swift */,
 				386731EC28FDD28600BA0F3D /* RecordingDataModel.swift */,
 				386731EE28FDD38F00BA0F3D /* Helper.swift */,
+				38BFFC14290A8999007614D2 /* UserDocument.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -124,8 +133,19 @@
 				388A276028F823500019C70D /* ContentView.swift */,
 				386731F028FDD6C400BA0F3D /* RecordingView.swift */,
 				3833F1E72900394000356843 /* NoteView.swift */,
+				388785C0290A7CE600ACD948 /* LoginView.swift */,
+				38BFFC16290A8F48007614D2 /* RegisterView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		388785BB290A749700ACD948 /* Connections */ = {
+			isa = PBXGroup;
+			children = (
+				388785BC290A74B700ACD948 /* FirebaseStorageConnection.swift */,
+				388785BE290A793000ACD948 /* FirestoreConnection.swift */,
+			);
+			path = Connections;
 			sourceTree = "<group>";
 		};
 		388A275228F823500019C70D = {
@@ -151,9 +171,9 @@
 		388A275D28F823500019C70D /* VoiceNote */ = {
 			isa = PBXGroup;
 			children = (
+				388785BB290A749700ACD948 /* Connections */,
 				386731E928FDC1E000BA0F3D /* Info.plist */,
 				388A275E28F823500019C70D /* VoiceNoteApp.swift */,
-				38C3A5DA2907DF3700B4AADA /* GoogleService-Info.plist */,
 				387156DF290930FD00A0E01B /* GoogleService-Info.plist */,
 				386731F228FDD6FF00BA0F3D /* Views */,
 				388A276228F823530019C70D /* Assets.xcassets */,
@@ -308,7 +328,6 @@
 				388A276628F823530019C70D /* Preview Assets.xcassets in Resources */,
 				388A276328F823530019C70D /* Assets.xcassets in Resources */,
 				387156E0290930FD00A0E01B /* GoogleService-Info.plist in Resources */,
-				38C3A5DB2907DF3700B4AADA /* GoogleService-Info.plist in Resources */,
 				387156DE29092BA000A0E01B /* techlove_logo-03 (1).png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -337,11 +356,16 @@
 				388A276128F823500019C70D /* ContentView.swift in Sources */,
 				386731EB28FDC92F00BA0F3D /* Extensions.swift in Sources */,
 				386731ED28FDD28600BA0F3D /* RecordingDataModel.swift in Sources */,
+				388785BF290A793000ACD948 /* FirestoreConnection.swift in Sources */,
 				388A275F28F823500019C70D /* VoiceNoteApp.swift in Sources */,
 				388A278928F8240E0019C70D /* Note.swift in Sources */,
+				38BFFC17290A8F48007614D2 /* RegisterView.swift in Sources */,
+				38BFFC15290A8999007614D2 /* UserDocument.swift in Sources */,
+				388785BD290A74B700ACD948 /* FirebaseStorageConnection.swift in Sources */,
 				386731F128FDD6C400BA0F3D /* RecordingView.swift in Sources */,
 				3833F1E82900394000356843 /* NoteView.swift in Sources */,
 				388A278B28F825180019C70D /* AllNotes.swift in Sources */,
+				388785C1290A7CE600ACD948 /* LoginView.swift in Sources */,
 				386731E728FDBED500BA0F3D /* AudioRecorder.swift in Sources */,
 				386731EF28FDD38F00BA0F3D /* Helper.swift in Sources */,
 			);
