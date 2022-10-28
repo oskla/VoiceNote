@@ -13,5 +13,7 @@ struct UserDocument: Identifiable, Codable {
     
     @DocumentID var id: String?
     var name: String
+    var recording: [String]?
+    var notes: [Note]?
     
 }

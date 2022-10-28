@@ -19,17 +19,13 @@ import FirebaseStorage
 // - Break out view from NewNote and EditNote and reuse that component in both
 //-. https://blckbirds.com/post/voice-recorder-app-in-swiftui-2/
 
-// 1. Add Voicememo function - CHECK
-// 5. onDelete in NotesList - CHECK
-// Move Voice recorder function intop popUp - CHECK
-// - Add voice-name to subMenu inside EditNote
 
 struct ContentView: View {
     
     // Singleton. Will always refer to the same instance
-    var db = Firestore.firestore()
+   // var db = Firestore.firestore()
     @StateObject var firestoreConnection = FirestoreConnection()
-    
+   // @StateObject var userDocument = UserDocument.
     @StateObject var allNotes = AllNotes()
     @ObservedObject var audioRecorder: AudioRecorder
     @State var showRecordPopup = false
@@ -44,6 +40,13 @@ struct ContentView: View {
             
         
         VStack {
+            
+            Button(action: {
+                print(firestoreConnection.userDocument?.name ?? "error loading name")
+            }, label: {
+                Text("firestore name")
+            })
+            
             NotesHomeView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
             
             NavigationLink(destination: LoginView(firestoreConnection: firestoreConnection), label: {
@@ -55,6 +58,9 @@ struct ContentView: View {
             .environmentObject(firestoreConnection)
             
             
+            
+        }.onAppear {
+            firestoreConnection.listenToDb()
         }
     }
 }
@@ -87,8 +93,6 @@ struct NotesHomeView: View {
             .onAppear{
                 showTabViewPopup = true
                 
-             //   print(allNotes.notes)
-               // print(audioRecorder.recordings)
                 
             }
         }
@@ -198,6 +202,7 @@ struct NewNoteView: View {
 struct EditNoteView: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @EnvironmentObject var firestoreConnection: FirestoreConnection
     @EnvironmentObject var allNotes: AllNotes
     @EnvironmentObject var audioRecorder: AudioRecorder
     @Binding var showRecordPopup: Bool
@@ -218,7 +223,7 @@ struct EditNoteView: View {
                 .background(.cyan)
                 .padding(.horizontal)
             
-            RecordingsList(audioRecorder: audioRecorder, selectedNote: $selectedNote)
+            RecordingsList(firestoreConnection: firestoreConnection, audioRecorder: audioRecorder, selectedNote: $selectedNote)
             
             if showEditTabVew {
                 CustomTabViewNotes(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)

@@ -123,16 +123,27 @@ struct RecordingEditNoteView: View {
 
 struct RecordingsList: View {
     
+    @ObservedObject var firestoreConnection: FirestoreConnection
     @ObservedObject var audioRecorder: AudioRecorder
     @Binding var selectedNote: Note
     var body: some View {
         List() {
             
-            ForEach(audioRecorder.recordings, id: \.createdAt) {
+            if let userDocument = firestoreConnection.userDocument {
                 
-                recording in
-                RecordingRow(audioURL: recording.fileURL)
+                if let recordings = userDocument.recording {
+                   
+//                    ForEach(recordings) {
+//                        
+//                        recording in
+//                        RecordingRow(audioURL: recording.fileURL)
+//                    }
+                }
+                
+               
             }
+            
+          
             
             Text("Empty list")
         }.listStyle(SidebarListStyle())
@@ -159,13 +170,33 @@ struct RecordingMenu: View {
 struct RecordingRow: View {
 
 
-    var audioURL: URL
+    
+    var audioURL: URL // INSERT URL FROM FIREBASE HERE LATER
+    @ObservedObject var audioPlayer = AudioPlayer()
+    
     var body: some View {
 
         HStack {
-          //  Text("\(allNotes.getNameOfRecording(selectedNote: <#T##Note#>))")
+
             Text("\(audioURL.lastPathComponent)")
             Spacer()
+            if audioPlayer.isPlaying == false {
+                Button(action: {
+                    self.audioPlayer.startPlayback(audio: self.audioURL)
+                    print("Start playing audio")
+                }) {
+                    Image(systemName: "play.circle")
+                        .imageScale(.large)
+                }
+            } else {
+                Button(action: {
+                    self.audioPlayer.stopPlayback()
+                    print("Stop playing audio")
+                }) {
+                    Image(systemName: "stop.fill")
+                        .imageScale(.large)
+                }
+            }
         }
 
     }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3833F1E82900394000356843 /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3833F1E72900394000356843 /* NoteView.swift */; };
+		384D11A6290AF66B00B2E434 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384D11A5290AF66B00B2E434 /* AudioPlayer.swift */; };
 		386731E728FDBED500BA0F3D /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386731E628FDBED500BA0F3D /* AudioRecorder.swift */; };
 		386731EB28FDC92F00BA0F3D /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386731EA28FDC92F00BA0F3D /* Extensions.swift */; };
 		386731ED28FDD28600BA0F3D /* RecordingDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386731EC28FDD28600BA0F3D /* RecordingDataModel.swift */; };
@@ -56,6 +57,7 @@
 
 /* Begin PBXFileReference section */
 		3833F1E72900394000356843 /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
+		384D11A5290AF66B00B2E434 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		386731E628FDBED500BA0F3D /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		386731E928FDC1E000BA0F3D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		386731EA28FDC92F00BA0F3D /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				386731EC28FDD28600BA0F3D /* RecordingDataModel.swift */,
 				386731EE28FDD38F00BA0F3D /* Helper.swift */,
 				38BFFC14290A8999007614D2 /* UserDocument.swift */,
+				384D11A5290AF66B00B2E434 /* AudioPlayer.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -364,6 +367,7 @@
 				388785BD290A74B700ACD948 /* FirebaseStorageConnection.swift in Sources */,
 				386731F128FDD6C400BA0F3D /* RecordingView.swift in Sources */,
 				3833F1E82900394000356843 /* NoteView.swift in Sources */,
+				384D11A6290AF66B00B2E434 /* AudioPlayer.swift in Sources */,
 				388A278B28F825180019C70D /* AllNotes.swift in Sources */,
 				388785C1290A7CE600ACD948 /* LoginView.swift in Sources */,
 				386731E728FDBED500BA0F3D /* AudioRecorder.swift in Sources */,
