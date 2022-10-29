@@ -21,6 +21,7 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
     
     let firestoreConnection = FirestoreConnection()
     var audioFileUrl: URL?
+    var downloadUrl: URL?
     let objectWillChange = PassthroughSubject<AudioRecorder, Never>()
     var audioRecorder: AVAudioRecorder!
     var recordings = [Recording]()
@@ -71,10 +72,10 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
         audioFileUrl = tempAudioFileUrl2
     }
     
+   
     
     
-    
-    func stopRecording(db: FirestoreConnection) {
+    func stopRecording(db: FirestoreConnection, userDocument: UserDocument) {
 
         audioRecorder.stop()
         recording = false
@@ -83,14 +84,23 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
            print("audioFileUrl was empty")
             return
         }
+        
 
-        // Upload to Firebase Storage - when complete delete from phone
-       let path = handleAudioSendWith(db: db, url: "\(audioFileUrl)", completion: {_ in
-            self.deleteFiles("\(audioFileUrl)")
+        // Upload to Firebase Storage
+       handleAudioSendWith(db: db, url: "\(audioFileUrl)", completion: { _ in
+           
+           guard let downloadUrl = self.downloadUrl else {
+               return
+           }
+
+           db.addRecordingToDb(urlPath: "\(downloadUrl)")  // Add to firestore
+           db.addRecordingToUserDocument(audioURL: downloadUrl, userDocument: userDocument)  // Add data to User Document
+            self.deleteFiles("\(audioFileUrl)")      // Delete file from device
            
         })
+        //db.addRecordingToDb(urlPath: "\(self.downloadUrl)")
         
-        db.addRecordingToDb(urlPath: path)
+        
     }
     
     
@@ -114,19 +124,18 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
     
     /// FIREBASE STORAGE
   
-    func handleAudioSendWith(db: FirestoreConnection, url: String, completion:@escaping((String?) -> () ) ) -> String {
+    func handleAudioSendWith(db: FirestoreConnection, url: String, completion:@escaping((String?) -> () ) ) {
        
-     //   let mapIdString = idToString(uuid: mapId)
         @EnvironmentObject var firestoreConnection: FirestoreConnection
         
         guard let fileUrl = URL(string: url) else {
-            return ""
+            return
         }
         
         let dateString = Date().toString(dateFormat: "dd-MM-YY_'at'_HH:mm:ss")
         let fileName = NSUUID().uuidString + dateString + ".m4a"
         let storageRef = Storage.storage().reference().child("recordings")
-        
+       // var urlPath: URL?
         let path = "recordings/\(fileName)"
 
         storageRef.child(fileName).putFile(from: fileUrl, metadata: nil) { (metadata, error) in
@@ -140,23 +149,50 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
                 
             }
             
+            self.fetchRecording(path: path) {_ in
+                
+                print("downloadURL from closure in fetch: \(self.downloadUrl)")
+            }
+            
+            
             storageRef.downloadURL { (url, error) in
+                guard let urlStr = url else {
+                    completion(nil)
+                    return }
+                let urlFinal = (urlStr.absoluteString)
+                self.audioFileUrl = urlStr
+                completion(urlFinal)
+            }
+
+        }
+       
+    }
+
+    
+    func fetchRecording(path: String, completion:@escaping((String?) -> () ) ) {
+        
+        let fileRef = Storage.storage().reference().child(path)
+        var urlPath: URL?
+        
+        fileRef.downloadURL { url, error in
+            if let error = error {
+                print("error: \(error)")
+                completion(nil)
+            } else {
+                
                 guard let urlStr = url else {
                     completion(nil)
                     return }
                 
                 let urlFinal = (urlStr.absoluteString)
-                self.audioFileUrl = urlStr
+                self.downloadUrl = urlStr
                 completion(urlFinal)
-                
+//                self.downloadUrl = url
+//                urlPath = url
+//                print("does it even reach here? \(url)")
             }
-
         }
-        
-        return path
     }
-
-
     
     func deleteFiles(_ fileToDelete: String) {
             let fName = fileToDelete.getFileName()

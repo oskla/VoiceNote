@@ -15,7 +15,7 @@ class FirestoreConnection: ObservableObject {
     
     @Published var userLoggedIn = false
     @Published var currentUser: User?
-    @Published var userDocument: UserDocument?
+    @Published var userDocument: UserDocument?    
      
      var userDocumentListener: ListenerRegistration?
     
@@ -36,6 +36,7 @@ class FirestoreConnection: ObservableObject {
                 self.userLoggedIn = true
                 self.currentUser = user
                 self.listenToFirestore()
+                            
                 
             } else {
                 // if not logged in
@@ -81,7 +82,7 @@ class FirestoreConnection: ObservableObject {
                     print("Something went wrong. Error \(failure)")
                 }
                 
-                print(self.userDocument)
+               // print(self.userDocument)
             }
         }
 }
@@ -123,6 +124,10 @@ class FirestoreConnection: ObservableObject {
             }
             
         }
+    }
+    
+    func addRecordingToUserDocument(audioURL: URL, userDocument: UserDocument) {
+        
     }
     
     

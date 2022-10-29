@@ -43,6 +43,7 @@ struct ContentView: View {
             
             Button(action: {
                 print(firestoreConnection.userDocument?.name ?? "error loading name")
+                print(firestoreConnection.userDocument?.recording)
             }, label: {
                 Text("firestore name")
             })
@@ -61,6 +62,7 @@ struct ContentView: View {
             
         }.onAppear {
             firestoreConnection.listenToDb()
+            //print("printing userDocument: \(firestoreConnection.userDocument)")
         }
     }
 }

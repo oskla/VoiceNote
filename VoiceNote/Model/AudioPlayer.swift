@@ -14,12 +14,30 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
     let objectWillChange = PassthroughSubject<AudioPlayer, Never>()
     var audioPlayer: AVAudioPlayer!
+    var audioPlayer2: AVPlayer!
     
     var isPlaying = false {
         didSet {
             objectWillChange.send(self)
         }
     }
+    
+    
+    
+    func handleAudioPLay(audio: URL) {
+      
+            do {
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playAndRecord)
+                audioPlayer = try AVAudioPlayer(contentsOf: audio)
+                audioPlayer?.delegate = self
+                audioPlayer?.prepareToPlay()
+                audioPlayer?.play()
+                print("Audio ready to play")
+            } catch let error {
+                print(error.localizedDescription)
+            }
+    }
+    
     
     func startPlayback(audio: URL) {
         
@@ -33,18 +51,26 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
         }
         
         do {
-            audioPlayer = try AVAudioPlayer(contentsOf: audio)
-            audioPlayer.delegate = self
-            audioPlayer.play()
+           // audioPlayer = try AVAudioPlayer(contentsOf: audio)
+
+
+            let item = AVPlayerItem(url: audio)
+            audioPlayer2 = AVPlayer(playerItem: item)
+           
+            
+          // audioPlayer2.delegate = self
+          //  audioPlayer2.prepareToPlay()
+            audioPlayer2.play()
             isPlaying = true
-        } catch {
-         print("Playback failed")
+        } catch let error {
+            print("Playback failed \(error.localizedDescription)")
         }
         
     }
     
     func stopPlayback() {
-        audioPlayer.stop()
+       // audioPlayer.stop()
+        audioPlayer2.pause()
         isPlaying = false
     }
     

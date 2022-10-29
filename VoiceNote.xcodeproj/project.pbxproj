@@ -34,6 +34,7 @@
 		388A277C28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A277B28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift */; };
 		388A278928F8240E0019C70D /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A278828F8240E0019C70D /* Note.swift */; };
 		388A278B28F825180019C70D /* AllNotes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A278A28F825180019C70D /* AllNotes.swift */; };
+		38A1FC6F290C018B00B46B03 /* RecordingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A1FC6E290C018B00B46B03 /* RecordingsList.swift */; };
 		38BFFC15290A8999007614D2 /* UserDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BFFC14290A8999007614D2 /* UserDocument.swift */; };
 		38BFFC17290A8F48007614D2 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BFFC16290A8F48007614D2 /* RegisterView.swift */; };
 /* End PBXBuildFile section */
@@ -81,6 +82,7 @@
 		388A277B28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		388A278828F8240E0019C70D /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		388A278A28F825180019C70D /* AllNotes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllNotes.swift; sourceTree = "<group>"; };
+		38A1FC6E290C018B00B46B03 /* RecordingsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingsList.swift; sourceTree = "<group>"; };
 		38BFFC14290A8999007614D2 /* UserDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDocument.swift; sourceTree = "<group>"; };
 		38BFFC16290A8F48007614D2 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -126,6 +128,7 @@
 				386731EE28FDD38F00BA0F3D /* Helper.swift */,
 				38BFFC14290A8999007614D2 /* UserDocument.swift */,
 				384D11A5290AF66B00B2E434 /* AudioPlayer.swift */,
+				38A1FC6E290C018B00B46B03 /* RecordingsList.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -367,6 +370,7 @@
 				388785BD290A74B700ACD948 /* FirebaseStorageConnection.swift in Sources */,
 				386731F128FDD6C400BA0F3D /* RecordingView.swift in Sources */,
 				3833F1E82900394000356843 /* NoteView.swift in Sources */,
+				38A1FC6F290C018B00B46B03 /* RecordingsList.swift in Sources */,
 				384D11A6290AF66B00B2E434 /* AudioPlayer.swift in Sources */,
 				388A278B28F825180019C70D /* AllNotes.swift in Sources */,
 				388785C1290A7CE600ACD948 /* LoginView.swift in Sources */,
