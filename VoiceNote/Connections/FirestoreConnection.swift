@@ -180,12 +180,7 @@ class FirestoreConnection: ObservableObject {
         
         if let currentUser = currentUser {
             
-           // fireStore.collection("userData").document(currentUser.uid).updateData(["notes": FieldValue.arrayRemove([note])])
-           
-//            fireStore.collection("userData").document(currentUser.uid).updateData([
-//                "notes": FieldValue.arrayUnion([[note]])
-//            ])
-            
+
             fireStore.collection("userData").document(currentUser.uid).updateData([
                 "notes": FieldValue.arrayUnion([[
                     "id": "\(note.id)",
@@ -194,23 +189,7 @@ class FirestoreConnection: ObservableObject {
                     
                ]])
             ])
-            
-            
-            
-//            do {
-//                _ = try fireStore.collection("userData").document(currentUser.uid).updateData([
-//                     "notes":
-//                         Firestore.Encoder().encode([notes])
-//
-//                 ])
-//            } catch {
-//                print("error\(error.localizedDescription)")
-//            }
-            
-          
-            
         }
-        
     }
     
     func listenToDb() {

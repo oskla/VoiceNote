@@ -223,7 +223,6 @@ struct NewNoteView: View {
                 if noteTitle != "New note" || noteContent != "" {
                     let newNote = Note(noteTitle: noteTitle, noteContent: noteContent)
                     allNotes.addEntry(newNote: newNote)
-                    print("All notes: \(allNotes.notes)")
                     firestoreConnection.addNoteToDb(note: newNote)
                 }
             }
@@ -270,7 +269,11 @@ struct EditNoteView: View {
         }
         .navigationBarTitle("", displayMode: .inline)
             .onChange(of: selectedNote, perform: allNotes.editNote)
-          
+            .onDisappear {
+                
+               
+                firestoreConnection.addNoteToDb(note: selectedNote)
+                }
     }
 
     
