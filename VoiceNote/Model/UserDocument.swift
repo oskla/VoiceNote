@@ -9,12 +9,14 @@ import Foundation
 import FirebaseFirestoreSwift
 
 
-struct UserDocument: Identifiable, Codable {
+struct UserDocument: Identifiable, Codable, Equatable {
     
     
     @DocumentID var id: String?
     var name: String
-    var recording: [String]?
+    var recording: [UserDocumentRecording]?   // [UserDocumentRecording]
     var notes: [Note]?
+    
+   
     
 }

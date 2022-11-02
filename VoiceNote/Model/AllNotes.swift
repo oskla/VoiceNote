@@ -63,15 +63,15 @@ class AllNotes: ObservableObject {
         
     }
     
-    func getNameOfRecording(selectedNote: Note) -> String {
-        if selectedNote.recording.isEmpty == false {
-            let noteCreatedAt: String = ("\(selectedNote.recording[0].createdAt)")
-            return noteCreatedAt
-        }
+//    func getNameOfRecording(selectedNote: Note) -> String {
+//        if selectedNote.recording.isEmpty == false {
+//            let noteCreatedAt: String = ("\(selectedNote.recording[0].createdAt)")
+//            return noteCreatedAt
+//        }
         
-        
-       return "failed getting name"
-    }
+//        
+//       return "failed getting name"
+//    }
        
  
     
