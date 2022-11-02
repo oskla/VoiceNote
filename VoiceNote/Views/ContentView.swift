@@ -12,6 +12,8 @@ import FirebaseStorage
 
 // TODO
 
+// - BUGS - When creating new account, you can't start recording right away. Firebase Storage + Firestore-connection doesnt seem to link properly
+
 // - Fetch recordings from Firebase (to show accurate information inside editNote)
 // - When recording inside EditNote - no new note in list should be added
 // - SearchBar in List
@@ -22,55 +24,73 @@ import FirebaseStorage
 
 struct ContentView: View {
     
-    // Singleton. Will always refer to the same instance
-   // var db = Firestore.firestore()
+
     @StateObject var firestoreConnection = FirestoreConnection()
-   // @StateObject var userDocument = UserDocument.
     @StateObject var allNotes = AllNotes()
+    @StateObject var allRecordings = AllRecordings()
     @ObservedObject var audioRecorder: AudioRecorder
     @State var showRecordPopup = false
     @State var showTabViewPopup = true
     @State var showEditTabView = true
     
-
+    
     
     var body: some View {
         
-        NavigationView {
+        ZStack {
             
+            if firestoreConnection.userLoggedIn == true {
+                
+            NavigationView {
+                VStack {
+                    
+                    // Debug-button
+//                    Button(action: {
+//                        print(firestoreConnection.userDocument?.name ?? "error loading name")
+//                        print(firestoreConnection.userDocument?.recording ?? "error")
+//                    }, label: {
+//                        Text("firestore name")
+//                    })
+//
+                    NotesHomeView(showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
+                    
+                    // REGISTER-BUTTON
+//                    NavigationLink(destination: LoginView(), label: {
+//                        Text("Register")
+//                    }).padding().foregroundColor(.blue)
+                    
+                }
+                
+                
+                
+            }.onAppear {
+                firestoreConnection.listenToFirestore {
+                    guard let recordings = firestoreConnection.userDocument?.recording else {
+                       print("userDoc was empty")
+                        return
+                    }
+                  //  allRecordings.convertStringRecordingToUserDocRecording(stringRecordingArray: recordings)
+                }
+               
+//                audioRecorder.getAllMetaDataFromStorage(completion: { result in
+//                    print("klaor result: \(result)")
+//                })
+            }
         
-        VStack {
-            
-            Button(action: {
-                print(firestoreConnection.userDocument?.name ?? "error loading name")
-                print(firestoreConnection.userDocument?.recording)
-            }, label: {
-                Text("firestore name")
-            })
-            
-            NotesHomeView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
-            
-            NavigationLink(destination: LoginView(firestoreConnection: firestoreConnection), label: {
-                Text("Register")
-            }).padding().foregroundColor(.blue)
-            
+                // If not logged in
+            } else {
+                LoginView()
+            }
         }.environmentObject(allNotes)
             .environmentObject(audioRecorder)
             .environmentObject(firestoreConnection)
-            
-            
-            
-        }.onAppear {
-            firestoreConnection.listenToDb()
-            //print("printing userDocument: \(firestoreConnection.userDocument)")
-        }
+            .environmentObject(allRecordings)
     }
 }
 
 struct NotesHomeView: View {
-    var db = Firestore.firestore()
     @EnvironmentObject var allNotes: AllNotes
-    @ObservedObject var audioRecorder: AudioRecorder
+    @EnvironmentObject var audioRecorder: AudioRecorder
     @Binding var showRecordPopup: Bool
     @Binding var showTabViewPopup: Bool
     @Binding var showEditTabView: Bool
@@ -86,16 +106,22 @@ struct NotesHomeView: View {
                 if showTabViewPopup {
                     CustomTabViewHome(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup)
                 }
-                if showRecordPopup {
-                    RecordingView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
-                }
                 
+//                if showRecordPopup {
+//                    RecordingView(showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
+//                     .transition(.move(edge: .bottom))
+//                }
+                
+            }.overlay(alignment: .bottom) {
+                if showRecordPopup {
+                    RecordingView(showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
+                     .transition(.move(edge: .bottom))
+                }
             }
+ 
             .background(Color.init(red: 245/255, green: 245/255, blue: 245/255))
             .onAppear{
                 showTabViewPopup = true
-                
-                
             }
         }
     }
@@ -119,7 +145,7 @@ struct NotesList: View {
                 
                 ForEach(allNotes.getAllNotes()) {
                     note in
-                  
+                    
                     NavigationLink(destination: EditNoteView( showRecordPopup: $showRecordPopup, selectedNote: note, showEditTabVew: $showEditTabView)) {
                         
                         ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent)
@@ -171,6 +197,7 @@ struct NewNoteView: View {
     // Allows me to go back to previous view when pressing save
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @EnvironmentObject var allNotes: AllNotes
+    @EnvironmentObject var firestoreConnection: FirestoreConnection
     
     @State var noteContent = ""
     @State var noteTitle: String = "New note"
@@ -194,7 +221,10 @@ struct NewNoteView: View {
             .onDisappear {
                 
                 if noteTitle != "New note" || noteContent != "" {
-                    allNotes.addEntry(newNote: Note(noteTitle: noteTitle, noteContent: noteContent))
+                    let newNote = Note(noteTitle: noteTitle, noteContent: noteContent)
+                    allNotes.addEntry(newNote: newNote)
+                    print("All notes: \(allNotes.notes)")
+                    firestoreConnection.addNoteToDb(note: newNote)
                 }
             }
     }
@@ -225,7 +255,7 @@ struct EditNoteView: View {
                 .background(.cyan)
                 .padding(.horizontal)
             
-            RecordingsList(firestoreConnection: firestoreConnection, audioRecorder: audioRecorder, selectedNote: $selectedNote)
+            RecordingsList(selectedNote: $selectedNote)
             
             if showEditTabVew {
                 CustomTabViewNotes(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
@@ -233,15 +263,16 @@ struct EditNoteView: View {
             
             if showRecordPopup {
                 RecordingEditNoteView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
+                 
             }
             
             
-        }.navigationBarTitle("", displayMode: .inline)
+        }
+        .navigationBarTitle("", displayMode: .inline)
             .onChange(of: selectedNote, perform: allNotes.editNote)
           
-           
-        
     }
+
     
 }
 
@@ -275,7 +306,7 @@ struct CustomTabViewNotes: View {
                 Button(action: {
                     showRecordPopup = true
                     showEditTabView = false
-                   // print(selectedNote)
+                    // print(selectedNote)
                 },
                        label: {
                     Label("", systemImage: "record.circle")
@@ -319,7 +350,11 @@ struct CustomTabViewHome: View {
                 Spacer()
                 
                 Button(action: {
-                    showRecordPopup = true
+                    
+                    withAnimation {
+                        showRecordPopup = true
+                    }
+                    
                 },
                        label: {
                     Label("", systemImage: "record.circle")
@@ -345,10 +380,17 @@ struct CustomTabViewHome: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-         ContentView(audioRecorder: AudioRecorder()).environmentObject(AllNotes())
+       // ContentView(audioRecorder: AudioRecorder()).environmentObject(AllNotes())
+       // NotesHomeView(showRecordPopup: .constant(true), showTabViewPopup: .constant(false), showEditTabView: .constant(false))
+           // .environmentObject(AudioRecorder())
+         //   .environmentObject(AllNotes())
+            
         //    .previewDevice("iPhone 13 Pro")
         //  NewNoteView().environmentObject(AllNotes())
-       // EditNoteView(showRecordPopup: .constant(true), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(true)).environmentObject(AllNotes()).environmentObject(AudioRecorder())
+        EditNoteView(showRecordPopup: .constant(true), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(false)).environmentObject(AudioRecorder()).environmentObject(AllNotes()).environmentObject(FirestoreConnection())
+//                      selectedNote: Note(noteTitle: "hej", noteContent: "hej"),
+//                      showEditTabVew: .constant(true))
+//            .environmentObject(AllNotes()).environmentObject(AudioRecorder())
         // NotesList().environmentObject(AllNotes())
         // RecordingView(audioRecorder: AudioRecorder())
     }

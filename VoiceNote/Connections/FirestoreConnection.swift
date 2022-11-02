@@ -35,7 +35,9 @@ class FirestoreConnection: ObservableObject {
                 // if logged in
                 self.userLoggedIn = true
                 self.currentUser = user
-                self.listenToFirestore()
+                self.listenToFirestore {
+                    print("Done listening to Firestore")
+                }
                             
                 
             } else {
@@ -50,6 +52,8 @@ class FirestoreConnection: ObservableObject {
         }
     }
     
+
+    
     
    func stopListeningToFirestore() {
        if userDocument != nil {
@@ -57,9 +61,10 @@ class FirestoreConnection: ObservableObject {
        }
     }
     
+
     
     
-    func listenToFirestore() {
+    func listenToFirestore(completion:@escaping()->() ) {
     
         if let currentUser = currentUser {
             userDocumentListener = self.fireStore.collection("userData").document(currentUser.uid).addSnapshotListener { snapshot, error in
@@ -82,8 +87,11 @@ class FirestoreConnection: ObservableObject {
                     print("Something went wrong. Error \(failure)")
                 }
                 
+                completion()
+               
                // print(self.userDocument)
             }
+            
         }
 }
     
@@ -117,6 +125,7 @@ class FirestoreConnection: ObservableObject {
                 do {
                     // Creating new document in database
                     _ = try self.fireStore.collection("userData").document(authDataResult.user.uid).setData(from: newUserDocument)
+                    self.loginUser(userName: userName, password: password)
                 } catch {
                     print("error")
                 }
@@ -125,26 +134,80 @@ class FirestoreConnection: ObservableObject {
             
         }
     }
-    
-    func addRecordingToUserDocument(audioURL: URL, userDocument: UserDocument) {
         
-    }
     
-    
-    func addRecordingToDb(urlPath: String) {
+    func addRecordingToDb(urlPath: String, id: String?) {
         
         if let currentUser = currentUser {
             
-            fireStore.collection("userData").document(currentUser.uid).updateData(["recording": FieldValue.arrayUnion([urlPath])])
+          //  fireStore.collection("userData").document(currentUser.uid).updateData(["recording": FieldValue.arrayUnion([urlPath])])
+           
+            fireStore.collection("userData").document(currentUser.uid).updateData([
+                "recording": FieldValue.arrayUnion([[
+                    "name": urlPath,
+                    "id": id
+                    
+               ]])
+            ])
+            
+            
+            
+//            fireStore.collection("userData").document(currentUser.uid).updateData([
+//                "recording": ["Name": FieldValue.arrayUnion([urlPath]),
+//                              "id": "839tui"
+//                             ]
+//            ])
+                                                                        
+                                                                                   
+            
+            print("upload should be done. urlPath: \(urlPath), currentUser: \(currentUser)")
+        } else {
+            print("Something went wrong when uploading to Firestore")
         }
         
     }
     
-    func addNoteToDb(urlPath: String) {
+    func deleteRecordingFromDb(urlPath: String) {
+        
+        if let currentUser = currentUser {
+            fireStore.collection("userData").document(currentUser.uid).updateData(["recording": FieldValue.arrayRemove([urlPath])])
+        }
+       
+        
+    }
+    
+    func addNoteToDb(note: Note) {
         
         if let currentUser = currentUser {
             
-            fireStore.collection("userData").document(currentUser.uid).updateData(["notes": FieldValue.arrayUnion([urlPath])])
+           // fireStore.collection("userData").document(currentUser.uid).updateData(["notes": FieldValue.arrayRemove([note])])
+           
+//            fireStore.collection("userData").document(currentUser.uid).updateData([
+//                "notes": FieldValue.arrayUnion([[note]])
+//            ])
+            
+            fireStore.collection("userData").document(currentUser.uid).updateData([
+                "notes": FieldValue.arrayUnion([[
+                    "id": "\(note.id)",
+                    "noteTitle": note.noteTitle,
+                    "noteContent": note.noteContent
+                    
+               ]])
+            ])
+            
+            
+            
+//            do {
+//                _ = try fireStore.collection("userData").document(currentUser.uid).updateData([
+//                     "notes":
+//                         Firestore.Encoder().encode([notes])
+//
+//                 ])
+//            } catch {
+//                print("error\(error.localizedDescription)")
+//            }
+            
+          
             
         }
         

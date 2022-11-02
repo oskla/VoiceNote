@@ -24,19 +24,19 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
     
     
     
-    func handleAudioPLay(audio: URL) {
-      
-            do {
-                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playAndRecord)
-                audioPlayer = try AVAudioPlayer(contentsOf: audio)
-                audioPlayer?.delegate = self
-                audioPlayer?.prepareToPlay()
-                audioPlayer?.play()
-                print("Audio ready to play")
-            } catch let error {
-                print(error.localizedDescription)
-            }
-    }
+//    func handleAudioPLay(audio: URL) {
+//
+//            do {
+//                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playAndRecord)
+//                audioPlayer = try AVAudioPlayer(contentsOf: audio)
+//                audioPlayer?.delegate = self
+//                audioPlayer?.prepareToPlay()
+//                audioPlayer?.play()
+//                print("Audio ready to play")
+//            } catch let error {
+//                print(error.localizedDescription)
+//            }
+//    }
     
     
     func startPlayback(audio: URL) {

@@ -16,6 +16,6 @@ struct Note : Codable, Identifiable, Equatable {
     var noteContent: String
   //  var date: Date
   //  var recording: String? // Add recording here later
-    var recording: [Recording] = []
+   // var recording: [Recording] = []
    
 }

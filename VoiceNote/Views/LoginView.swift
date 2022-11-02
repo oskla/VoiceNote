@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @ObservedObject var firestoreConnection: FirestoreConnection
+    @EnvironmentObject var firestoreConnection: FirestoreConnection
     @State var lightGray = Color.init(red: 245/255, green: 245/255, blue: 245/255)
     @State var showRegisterPage = false
     @State var showLoginPage = true
@@ -23,7 +23,7 @@ struct LoginView: View {
         VStack {
             
             if showLoginPage {
-                LoginFieldsView(firestoreConnection: firestoreConnection, userName: $userName, password: $password, lightGray: lightGray)
+                LoginFieldsView(userName: $userName, password: $password, lightGray: lightGray)
                 Button(action: {
                     print("logging in")
                     if userName != "" && password != "" {
@@ -35,6 +35,7 @@ struct LoginView: View {
                 }).padding()
                     .background(lightGray)
                     .cornerRadius(7)
+                    
                 
                 Button(action: {
                     print("Register")
@@ -59,7 +60,7 @@ struct LoginView: View {
 }
 
 struct LoginFieldsView: View {
-    @ObservedObject var firestoreConnection: FirestoreConnection
+    @EnvironmentObject var firestoreConnection: FirestoreConnection
     @Binding var userName: String
     @Binding var password: String
     var lightGray: Color
@@ -69,13 +70,13 @@ struct LoginFieldsView: View {
         VStack(alignment: .leading) {
             
             Text("Username")
-            TextField("", text: $userName)
+            TextField("Kalle@haj.se", text: $userName)
                 .frame(height: 30)
                 .background(lightGray)
                 .cornerRadius(7)
             
             Text("Password")
-            TextField("", text: $password)
+            SecureField("Hejhej", text: $password)
                 .frame(height: 30)
                 .background(lightGray)
                 .cornerRadius(7)
@@ -90,6 +91,6 @@ struct LoginFieldsView: View {
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView(firestoreConnection: FirestoreConnection())
+        LoginView().environmentObject(FirestoreConnection())
     }
 }
