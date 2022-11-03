@@ -32,19 +32,9 @@ struct LoginView: View {
                     }
                 }, label: {
                     Text("Sign in")
-<<<<<<< Updated upstream
                 }).padding()
                     .background(lightGray)
                     .cornerRadius(7)
-=======
-                        .foregroundColor(.black)
-                        .font(Font.custom("IBMPlexSansDevanagari-Bold", size: 21))
-                        .bold()
-                }).frame(maxWidth: .infinity)
-                    .padding(20)
-                    .border(Color.black, width: 2)
-                    .background(.white)
->>>>>>> Stashed changes
                     
                 
                 Button(action: {

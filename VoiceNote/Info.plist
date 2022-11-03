@@ -2,16 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIAppFonts</key>
-	<array>
-		<string>IBMPlexSansDevanagari-Bold.ttf</string>
-		<string>IBMPlexSansDevanagari-Thin.ttf</string>
-		<string>IBMPlexSansDevanagari-ExtraLight.ttf</string>
-		<string>IBMPlexSansDevanagari-Light.ttf</string>
-		<string>IBMPlexSansDevanagari-Medium.ttf</string>
-		<string>IBMPlexSansDevanagari-Regular.ttf</string>
-		<string>IBMPlexSansDevanagari-SemiBold.ttf</string>
-	</array>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need access to your microphone2</string>
 </dict>

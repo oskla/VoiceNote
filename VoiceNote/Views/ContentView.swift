@@ -266,8 +266,6 @@ struct EditNoteView: View {
         .onDisappear { firestoreConnection.editNoteOnDb(noteToRemove: noteToRemove!, noteToAdd: Note(noteTitle: selectedNote.noteTitle, noteContent: selectedNote.noteContent))
         
         }.environmentObject(audioPlayer)
-
-        
     }
     
 }
