@@ -175,6 +175,7 @@ struct RecordingMenu: View {
     @EnvironmentObject var firestoreConnection: FirestoreConnection
     @EnvironmentObject var allRecordings: AllRecordings
     @Binding var selectedNote: Note
+    @Binding var showPlayer: Bool
     var body: some View {
         
         
@@ -186,9 +187,11 @@ struct RecordingMenu: View {
         ForEach(selectedNoteRecordings) {
                 recording in
                 Button(action: {
+                    print("tapped row")
+                    showPlayer.toggle()
                     // Add function here later - open Play-window
                 }) {
-                    RecordingSubMenuRow(selectedNote: $selectedNote, audioName: recording.name ?? "nil")
+                    RecordingSubMenuRow(selectedNote: $selectedNote, showPlayer: $showPlayer, audioName: recording.name ?? "nil")
                 }
                 
             }
@@ -201,7 +204,7 @@ struct RecordingMenu: View {
 struct RecordingRow: View {
     var audioURL: String
     @EnvironmentObject var firestoreConnection: FirestoreConnection
-    @ObservedObject var audioPlayer = AudioPlayer()
+    @Binding var audioPlayer = AudioPlayer()
     
     var body: some View {
         
@@ -239,6 +242,7 @@ struct RecordingSubMenuRow: View {
     @EnvironmentObject var firestoreConnection: FirestoreConnection
     @EnvironmentObject var allNotes: AllNotes
     @Binding var selectedNote: Note
+    @Binding var showPlayer: Bool
     
    // var audioURL: URL
     var audioName: String
@@ -246,6 +250,7 @@ struct RecordingSubMenuRow: View {
         
         HStack {
             // Text("\(audioURL.lastPathComponent)")
+           // RecordingRow(audioURL: audioName)
             Label("\(audioName)", systemImage: "plus.circle")
             // Label(audioURL.lastPathComponent, systemImage: "plus.circle")
             Spacer()

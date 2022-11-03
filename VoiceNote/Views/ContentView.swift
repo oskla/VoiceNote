@@ -223,9 +223,12 @@ struct EditNoteView: View {
     @EnvironmentObject var allNotes: AllNotes
     @EnvironmentObject var audioRecorder: AudioRecorder
     @Binding var showRecordPopup: Bool
+    @StateObject var audioPlayer = AudioPlayer()
     
     @State var selectedNote: Note
     @Binding var showEditTabVew: Bool
+    @State var noteToRemove: Note?
+    @State var showPlayer = false
     
     var body: some View {
         
@@ -243,7 +246,7 @@ struct EditNoteView: View {
             //RecordingsList(selectedNote: $selectedNote)
             
             if showEditTabVew {
-                CustomTabViewNotes(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
+                CustomTabViewNotes(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote, showPlayer: $showPlayer)
             }
             
             if showRecordPopup {
@@ -251,13 +254,19 @@ struct EditNoteView: View {
                  
             }
             
+          //  if showPlayer { PlayerView(selectedRecording: selectedRecording) }
             
+            
+        }.onAppear {
+            
+             noteToRemove = selectedNote
         }
         .navigationBarTitle("", displayMode: .inline)
-            .onChange(of: selectedNote, perform: allNotes.editNote)
-            .onDisappear { firestoreConnection.addNoteToDb(note: selectedNote) }
+           // .onChange(of: selectedNote, perform: allNotes.editNote)
+        .onDisappear { firestoreConnection.editNoteOnDb(noteToRemove: noteToRemove!, noteToAdd: Note(noteTitle: selectedNote.noteTitle, noteContent: selectedNote.noteContent))
+        
+        }.environmentObject(audioPlayer)
     }
-
     
 }
 
@@ -268,6 +277,7 @@ struct CustomTabViewNotes: View {
     @Binding var showRecordPopup: Bool
     @Binding var showEditTabView: Bool
     @Binding var selectedNote: Note
+    @Binding var showPlayer: Bool
     var body: some View {
         
         ZStack {
@@ -280,7 +290,7 @@ struct CustomTabViewNotes: View {
                 Spacer()
                 
                 Menu {
-                    RecordingMenu(audioRecorder: audioRecorder, selectedNote: $selectedNote)
+                    RecordingMenu(audioRecorder: audioRecorder, selectedNote: $selectedNote, showPlayer: $showPlayer)
                 } label: {
                     Image(systemName: "play.fill")
                 }.font(.system(size: 40))
