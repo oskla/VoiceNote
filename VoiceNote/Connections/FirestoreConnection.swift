@@ -5,9 +5,12 @@
 //  Created by Oskar Larsson on 2022-10-27.
 //
 
+
+import FirebaseFirestore
 import Foundation
 import Firebase
 import SwiftUI
+import FirebaseDatabase
 
 
 class FirestoreConnection: ObservableObject {
@@ -19,7 +22,6 @@ class FirestoreConnection: ObservableObject {
     @Published var userDocument: UserDocument?    
      
      var userDocumentListener: ListenerRegistration?
-  // var userDocumentListener2: ListenerRegistration?
     
     init() {
         
@@ -154,13 +156,24 @@ class FirestoreConnection: ObservableObject {
         if let currentUser = currentUser {
             fireStore.collection("userData").document(currentUser.uid).updateData(["recording": FieldValue.arrayRemove([urlPath])])
         }
-       
+    }
+    
+    func editNoteOnDb(noteToRemove: Note, noteToAdd: Note) {
+       // 
+        if let currentUser = currentUser {
+            
+            self.deleteNoteFromDb(note: noteToRemove)
+            self.addNoteToDb(note: noteToAdd)
+            
+          //  fireStore.collection("userData").document(currentUser.uid).updateData(["recording": FieldValue.arrayRemove([urlPath])])
+            
+        }
         
     }
     
     func deleteNoteFromDb(note: Note) {
         if let currentUser = currentUser {
-            var myUserDocument: UserDocument?
+          //  var myUserDocument: UserDocument?
             
             do {
                 _ = try fireStore.collection("userData").document(currentUser.uid).updateData(["notes": FieldValue.arrayRemove([Firestore.Encoder().encode(note)])])
