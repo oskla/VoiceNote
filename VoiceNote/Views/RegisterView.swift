@@ -49,24 +49,33 @@ struct RegisterFieldsView: View {
     var body: some View {
         
         VStack(alignment: .leading) {
-            
-            Text("Username")
-            TextField("", text: $userName)
-                .frame(height: 30)
-                .background(lightGray)
-                .cornerRadius(7)
-            
-            Text("Password")
-            TextField("", text: $password)
-                .frame(height: 30)
-                .background(lightGray)
-                .cornerRadius(7)
-            
-            Text("Confirm password")
-            TextField("", text: $confirmPassword)
-                .frame(height: 30)
-                .background(lightGray)
-                .cornerRadius(7)
+            HStack {
+                           Image(systemName: "envelope")
+                           TextField("Your email", text: $userName)
+                               .font(.system(size: 22))
+                               .frame(height: 50)
+                               .background(.white)
+                       }
+                       Rectangle().frame(height: 1)
+                           .padding(.bottom, 5)
+                 
+                       HStack {
+                           Image(systemName: "key")
+                           TextField("Your password", text: $password)
+                               .font(.system(size: 22))
+                               .frame(height: 50)
+                               .background(.white)
+                       }
+                       Rectangle().frame(height: 1)
+                           .padding(.bottom, 5)
+                       HStack {
+                           Image(systemName: "key")
+                           TextField("Confirm password", text: $confirmPassword)
+                               .frame(height: 50)
+                               .background(.white)
+                       }
+                       Rectangle().frame(height: 1)
+                           .padding(.bottom, 5)
             
         }.padding(50)
         
