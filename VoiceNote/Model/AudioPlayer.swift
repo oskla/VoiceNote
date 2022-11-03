@@ -22,52 +22,47 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
         }
     }
     
-    
-    
-//    func handleAudioPLay(audio: URL) {
-//
-//            do {
-//                try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playAndRecord)
-//                audioPlayer = try AVAudioPlayer(contentsOf: audio)
-//                audioPlayer?.delegate = self
-//                audioPlayer?.prepareToPlay()
-//                audioPlayer?.play()
-//                print("Audio ready to play")
-//            } catch let error {
-//                print(error.localizedDescription)
-//            }
-//    }
-    
+
     
     func startPlayback(audio: URL) {
         
         let playbackSession = AVAudioSession.sharedInstance()
+            
         
         do {
-            // Using speakers instead of earpiece
-            try playbackSession.overrideOutputAudioPort(AVAudioSession.PortOverride.speaker)
+            try playbackSession.setCategory(.playback)
         } catch {
-            print("Playing over the device's speakers failed")
+            print("error activation session: \(error.localizedDescription)")
         }
+        
         
         do {
 
             let item = AVPlayerItem(url: audio)
             audioPlayer2 = AVPlayer(playerItem: item)
-           
             audioPlayer2.play()
             isPlaying = true
             
-        } catch let error {
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(fileComplete),
+                name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                object: nil
+            )
+        } catch {
             print("Playback failed \(error.localizedDescription)")
         }
         
     }
     
     func stopPlayback() {
-
+       // audioPlayer.stop()
         audioPlayer2.pause()
         isPlaying = false
+    }
+    
+    @objc func fileComplete() {
+       isPlaying = false
     }
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
