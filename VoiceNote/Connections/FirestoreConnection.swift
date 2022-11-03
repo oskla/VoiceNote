@@ -7,6 +7,7 @@
 
 import Foundation
 import Firebase
+import SwiftUI
 
 
 class FirestoreConnection: ObservableObject {
@@ -18,6 +19,7 @@ class FirestoreConnection: ObservableObject {
     @Published var userDocument: UserDocument?    
      
      var userDocumentListener: ListenerRegistration?
+  // var userDocumentListener2: ListenerRegistration?
     
     init() {
         
@@ -52,8 +54,6 @@ class FirestoreConnection: ObservableObject {
         }
     }
     
-
-    
     
    func stopListeningToFirestore() {
        if userDocument != nil {
@@ -62,8 +62,6 @@ class FirestoreConnection: ObservableObject {
     }
     
 
-    
-    
     func listenToFirestore(completion:@escaping()->() ) {
     
         if let currentUser = currentUser {
@@ -89,7 +87,6 @@ class FirestoreConnection: ObservableObject {
                 
                 completion()
                
-               // print(self.userDocument)
             }
             
         }
@@ -99,9 +96,6 @@ class FirestoreConnection: ObservableObject {
         
         Auth.auth().signIn(withEmail: userName, password: password) {
             authDataResult, error in
-            
-           // authDataResult?.user.uid
-           // self.userLoggedIn = true
             
             if let error = error {
                 print("Error logging in \(error)")
@@ -139,8 +133,6 @@ class FirestoreConnection: ObservableObject {
     func addRecordingToDb(urlPath: String, id: String?) {
         
         if let currentUser = currentUser {
-            
-          //  fireStore.collection("userData").document(currentUser.uid).updateData(["recording": FieldValue.arrayUnion([urlPath])])
            
             fireStore.collection("userData").document(currentUser.uid).updateData([
                 "recording": FieldValue.arrayUnion([[
@@ -149,16 +141,6 @@ class FirestoreConnection: ObservableObject {
                     
                ]])
             ])
-            
-            
-            
-//            fireStore.collection("userData").document(currentUser.uid).updateData([
-//                "recording": ["Name": FieldValue.arrayUnion([urlPath]),
-//                              "id": "839tui"
-//                             ]
-//            ])
-                                                                        
-                                                                                   
             
             print("upload should be done. urlPath: \(urlPath), currentUser: \(currentUser)")
         } else {
@@ -176,11 +158,21 @@ class FirestoreConnection: ObservableObject {
         
     }
     
+    func deleteNoteFromDb(note: Note) {
+        if let currentUser = currentUser {
+            var myUserDocument: UserDocument?
+            
+            do {
+                _ = try fireStore.collection("userData").document(currentUser.uid).updateData(["notes": FieldValue.arrayRemove([Firestore.Encoder().encode(note)])])
+            } catch {
+                print("error \(error.localizedDescription)")
+            }
+        }
+    }
+    
     func addNoteToDb(note: Note) {
         
         if let currentUser = currentUser {
-            
-
             fireStore.collection("userData").document(currentUser.uid).updateData([
                 "notes": FieldValue.arrayUnion([[
                     "id": "\(note.id)",

@@ -34,7 +34,9 @@ struct RecordingView: View {
                     guard let userDocument = firestoreConnection.userDocument else { return }
                     
                     self.audioRecorder.stopRecording(db: firestoreConnection, userDocument: userDocument, allRecordings: allRecordings, selectedNoteId: "empty")
-                    allNotes.addEntry(newNote: Note(noteTitle: "new recording", noteContent: ""))
+                    let newNote = Note(noteTitle: "new recording", noteContent: "")
+                    allNotes.addEntry(newNote: newNote)
+                    firestoreConnection.addNoteToDb(note: newNote)
                    
                     withAnimation {
                         showRecordPopup = false

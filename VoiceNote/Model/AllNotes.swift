@@ -12,19 +12,31 @@ class AllNotes: ObservableObject {
     
     @Published var notes = [Note]()
     
-    init() {
-        
-        addEntry(newNote: Note(noteTitle: "Titel", noteContent: "content"))
-        addEntry(newNote: Note(noteTitle: "Titel2", noteContent: "content2"))
-        addEntry(newNote: Note(noteTitle: "Titel3", noteContent: "content3"))
-        addEntry(newNote: Note(noteTitle: "Titel4", noteContent: "content4"))
-        addEntry(newNote: Note(noteTitle: "Titel5", noteContent: "content5"))
-        
-    }
+//    init() {
+//
+//        addEntry(newNote: Note(noteTitle: "Titel", noteContent: "content"))
+//        addEntry(newNote: Note(noteTitle: "Titel2", noteContent: "content2"))
+//        addEntry(newNote: Note(noteTitle: "Titel3", noteContent: "content3"))
+//        addEntry(newNote: Note(noteTitle: "Titel4", noteContent: "content4"))
+//        addEntry(newNote: Note(noteTitle: "Titel5", noteContent: "content5"))
+//
+//    }
     
     func addEntry(newNote: Note) {
         notes.append(newNote)
         
+    }
+    
+    func hasRecordings(noteId: String, db: FirestoreConnection) -> Bool {
+        
+        guard let userDocumentRecording =  db.userDocument?.recording else { return false }
+        
+        let new = userDocumentRecording.first(where: {$0.id == noteId})
+        
+        if new != nil {
+            return true
+        }
+        return false
     }
     
     func getAllNotes() -> [Note] {
@@ -58,8 +70,9 @@ class AllNotes: ObservableObject {
         return currentRecording
     }
     
-    func removeNote(at offsets: IndexSet) {
+    func removeNote(at offsets: IndexSet, db: FirestoreConnection, note: Note) {
         notes.remove(atOffsets: offsets)
+        db.deleteNoteFromDb(note: note)
         
     }
     

@@ -42,39 +42,19 @@ struct ContentView: View {
             if firestoreConnection.userLoggedIn == true {
                 
             NavigationView {
-                VStack {
-                    
-                    // Debug-button
-//                    Button(action: {
-//                        print(firestoreConnection.userDocument?.name ?? "error loading name")
-//                        print(firestoreConnection.userDocument?.recording ?? "error")
-//                    }, label: {
-//                        Text("firestore name")
-//                    })
-//
+             //   VStack {
                     NotesHomeView(showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
                     
-                    // REGISTER-BUTTON
-//                    NavigationLink(destination: LoginView(), label: {
-//                        Text("Register")
-//                    }).padding().foregroundColor(.blue)
-                    
-                }
+           //     }
                 
-                
-                
+
             }.onAppear {
-                firestoreConnection.listenToFirestore {
-                    guard let recordings = firestoreConnection.userDocument?.recording else {
-                       print("userDoc was empty")
-                        return
-                    }
-                  //  allRecordings.convertStringRecordingToUserDocRecording(stringRecordingArray: recordings)
-                }
-               
-//                audioRecorder.getAllMetaDataFromStorage(completion: { result in
-//                    print("klaor result: \(result)")
-//                })
+//                firestoreConnection.listenToFirestore {
+//                  //  guard let recordings = firestoreConnection.userDocument?.recording else {
+//                       print("hej")
+//                        return
+//                    
+//                }
             }
         
                 // If not logged in
@@ -107,23 +87,20 @@ struct NotesHomeView: View {
                     CustomTabViewHome(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup)
                 }
                 
-//                if showRecordPopup {
-//                    RecordingView(showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
-//                     .transition(.move(edge: .bottom))
-//                }
-                
             }.overlay(alignment: .bottom) {
                 if showRecordPopup {
                     RecordingView(showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
                      .transition(.move(edge: .bottom))
                 }
             }
+            
  
             .background(Color.init(red: 245/255, green: 245/255, blue: 245/255))
             .onAppear{
                 showTabViewPopup = true
             }
-        }
+            
+        }.navigationBarTitle("Notes", displayMode: .inline)
     }
 }
 
@@ -134,28 +111,37 @@ struct NotesList: View {
     
     @EnvironmentObject var allNotes: AllNotes
     @EnvironmentObject var audioRecorder: AudioRecorder
+    @EnvironmentObject var firestoreConnection: FirestoreConnection
     @Binding var showRecordPopup: Bool
     @Binding var showEditTabView: Bool
+    @State var myNote: Note?
+    
+    func getNote(note: Note) {
+        myNote = note
+    }
     
     var body: some View {
         
         VStack {
             
             List(){
+                if let userDocumentNotes = firestoreConnection.userDocument?.notes {
+                    ForEach(userDocumentNotes) {
+                        note in
+                        
+                       
+                        NavigationLink(destination: EditNoteView( showRecordPopup: $showRecordPopup, selectedNote: note, showEditTabVew: $showEditTabView)) {
+                            ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent, hasRecording: allNotes.hasRecordings(noteId: "\(note.id)", db: firestoreConnection))
+                                .listRowBackground(Color.init(red: 245/255, green: 245/255, blue: 245/255))
+                            
+                        }.onAppear { getNote(note: note) }
+                    }.onDelete(perform: { indexSet in
+                        allNotes.removeNote(at: indexSet, db: firestoreConnection, note: myNote!)
+                    })
+                }
                 
-                ForEach(allNotes.getAllNotes()) {
-                    note in
-                    
-                    NavigationLink(destination: EditNoteView( showRecordPopup: $showRecordPopup, selectedNote: note, showEditTabVew: $showEditTabView)) {
-                        
-                        ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent)
-                            .listRowBackground(Color.init(red: 245/255, green: 245/255, blue: 245/255))
-                        
-                    }
-                    
-                }.onDelete(perform: allNotes.removeNote)
             }
-            .listStyle(SidebarListStyle())
+            //.listStyle(SidebarListStyle())
             
         }
     }
@@ -165,7 +151,7 @@ struct NotesList: View {
 struct ListCell: View {
     var noteTitle: String
     var noteContent: String
-    var recording: String?
+    var hasRecording: Bool
     
     var body: some View {
         HStack {
@@ -181,7 +167,7 @@ struct ListCell: View {
             }
             Spacer()
             
-            if recording != nil {
+            if hasRecording == true {
                 Image(systemName: "mic")
             }
             
@@ -254,7 +240,7 @@ struct EditNoteView: View {
                 .background(.cyan)
                 .padding(.horizontal)
             
-            RecordingsList(selectedNote: $selectedNote)
+            //RecordingsList(selectedNote: $selectedNote)
             
             if showEditTabVew {
                 CustomTabViewNotes(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
@@ -269,11 +255,7 @@ struct EditNoteView: View {
         }
         .navigationBarTitle("", displayMode: .inline)
             .onChange(of: selectedNote, perform: allNotes.editNote)
-            .onDisappear {
-                
-               
-                firestoreConnection.addNoteToDb(note: selectedNote)
-                }
+            .onDisappear { firestoreConnection.addNoteToDb(note: selectedNote) }
     }
 
     
@@ -315,7 +297,7 @@ struct CustomTabViewNotes: View {
                     Label("", systemImage: "record.circle")
                         .font(.system(size: 40))
                         .foregroundStyle(.pink, .black)
-                        .navigationTitle("Voice notes")
+                        //.navigationTitle("Voice notes")
                 })
                 
                 
@@ -363,7 +345,7 @@ struct CustomTabViewHome: View {
                     Label("", systemImage: "record.circle")
                         .font(.system(size: 40))
                         .foregroundStyle(.pink, .gray)
-                        .navigationTitle("Voice notes")
+                        //.navigationTitle("Voice notes")
                 })
                 Spacer()
                 
@@ -384,13 +366,13 @@ struct CustomTabViewHome: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
        // ContentView(audioRecorder: AudioRecorder()).environmentObject(AllNotes())
-       // NotesHomeView(showRecordPopup: .constant(true), showTabViewPopup: .constant(false), showEditTabView: .constant(false))
+        NotesHomeView(showRecordPopup: .constant(true), showTabViewPopup: .constant(false), showEditTabView: .constant(false))
            // .environmentObject(AudioRecorder())
          //   .environmentObject(AllNotes())
             
         //    .previewDevice("iPhone 13 Pro")
         //  NewNoteView().environmentObject(AllNotes())
-        EditNoteView(showRecordPopup: .constant(true), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(false)).environmentObject(AudioRecorder()).environmentObject(AllNotes()).environmentObject(FirestoreConnection())
+       // EditNoteView(showRecordPopup: .constant(false), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(true)).environmentObject(AudioRecorder()).environmentObject(AllNotes()).environmentObject(FirestoreConnection())
 //                      selectedNote: Note(noteTitle: "hej", noteContent: "hej"),
 //                      showEditTabVew: .constant(true))
 //            .environmentObject(AllNotes()).environmentObject(AudioRecorder())

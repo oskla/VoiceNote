@@ -51,6 +51,8 @@ class AllRecordings: ObservableObject, Identifiable {
        
     }
     
+   
+    
     func getRecordingById(id: String, db: FirestoreConnection) -> UserDocumentRecording? {
         
         guard let userDocument = db.userDocument else { return nil }
