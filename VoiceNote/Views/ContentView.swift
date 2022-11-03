@@ -188,6 +188,7 @@ struct NewNoteView: View {
     @State var noteContent = ""
     @State var noteTitle: String = "New note"
     @State var selectedNewNote = Note(noteTitle: "New Note", noteContent: "")
+
     
     var body: some View {
         
@@ -226,10 +227,15 @@ struct EditNoteView: View {
     
     @State var selectedNote: Note
     @Binding var showEditTabVew: Bool
+    @State var showPlayer = true
+    @State var selectedRecording: UserDocumentRecording?
+    @StateObject var audioPlayer = AudioPlayer()
     
     var body: some View {
         
-        VStack {
+        ZStack {
+       
+            VStack(spacing: 0) {
             
             TextField("New recording", text: $selectedNote.noteTitle)
                 .font(.system(size: 30).bold())
@@ -242,18 +248,27 @@ struct EditNoteView: View {
             
             //RecordingsList(selectedNote: $selectedNote)
             
-            if showEditTabVew {
-                CustomTabViewNotes(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
+            if showPlayer {
+                PlayerView(audioPlayer: audioPlayer, selectedRecording: $selectedRecording)
+                    
             }
+            
+            if showEditTabVew {
+                CustomTabViewNotes(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote, showPlayer: $showPlayer, selectedRecording: $selectedRecording)
+            }
+            
             
             if showRecordPopup {
                 RecordingEditNoteView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
                  
             }
             
+           
+            
             
         }
-        .navigationBarTitle("", displayMode: .inline)
+           
+        }.navigationBarTitle("", displayMode: .inline)
             .onChange(of: selectedNote, perform: allNotes.editNote)
             .onDisappear { firestoreConnection.addNoteToDb(note: selectedNote) }
     }
@@ -268,6 +283,8 @@ struct CustomTabViewNotes: View {
     @Binding var showRecordPopup: Bool
     @Binding var showEditTabView: Bool
     @Binding var selectedNote: Note
+    @Binding var showPlayer: Bool
+    @Binding var selectedRecording: UserDocumentRecording?
     var body: some View {
         
         ZStack {
@@ -280,7 +297,7 @@ struct CustomTabViewNotes: View {
                 Spacer()
                 
                 Menu {
-                    RecordingMenu(audioRecorder: audioRecorder, selectedNote: $selectedNote)
+                    RecordingMenu(audioRecorder: audioRecorder, selectedNote: $selectedNote, showPlayer: $showPlayer, selectedRecording: $selectedRecording)
                 } label: {
                     Image(systemName: "play.fill")
                 }.font(.system(size: 40))
@@ -366,13 +383,12 @@ struct CustomTabViewHome: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
        // ContentView(audioRecorder: AudioRecorder()).environmentObject(AllNotes())
-        NotesHomeView(showRecordPopup: .constant(true), showTabViewPopup: .constant(false), showEditTabView: .constant(false))
-           // .environmentObject(AudioRecorder())
-         //   .environmentObject(AllNotes())
+      //  NotesHomeView(showRecordPopup: .constant(true), showTabViewPopup: .constant(false), showEditTabView: .constant(false))
+         ////  .environmentObject(AllNotes())
             
         //    .previewDevice("iPhone 13 Pro")
         //  NewNoteView().environmentObject(AllNotes())
-       // EditNoteView(showRecordPopup: .constant(false), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(true)).environmentObject(AudioRecorder()).environmentObject(AllNotes()).environmentObject(FirestoreConnection())
+        EditNoteView(showRecordPopup: .constant(false), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(true)).environmentObject(AudioRecorder()).environmentObject(AllNotes()).environmentObject(FirestoreConnection())
 //                      selectedNote: Note(noteTitle: "hej", noteContent: "hej"),
 //                      showEditTabVew: .constant(true))
 //            .environmentObject(AllNotes()).environmentObject(AudioRecorder())

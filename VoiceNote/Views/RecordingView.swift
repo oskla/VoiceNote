@@ -175,6 +175,8 @@ struct RecordingMenu: View {
     @EnvironmentObject var firestoreConnection: FirestoreConnection
     @EnvironmentObject var allRecordings: AllRecordings
     @Binding var selectedNote: Note
+    @Binding var showPlayer: Bool
+    @Binding var selectedRecording: UserDocumentRecording?
     var body: some View {
         
         
@@ -186,6 +188,9 @@ struct RecordingMenu: View {
         ForEach(selectedNoteRecordings) {
                 recording in
                 Button(action: {
+                    showPlayer = true
+                    selectedRecording = recording
+                    print("player should show")
                     // Add function here later - open Play-window
                 }) {
                     RecordingSubMenuRow(selectedNote: $selectedNote, audioName: recording.name ?? "nil")
@@ -239,6 +244,7 @@ struct RecordingSubMenuRow: View {
     @EnvironmentObject var firestoreConnection: FirestoreConnection
     @EnvironmentObject var allNotes: AllNotes
     @Binding var selectedNote: Note
+
     
    // var audioURL: URL
     var audioName: String

@@ -20,10 +20,15 @@ struct LoginView: View {
         ZStack {
             
         
-        VStack {
+            VStack (alignment: .leading) {
             
             if showLoginPage {
+                
+                Spacer()
+                Text("Login to your account").font(.system(size: 21))
+                Spacer()
                 LoginFieldsView(userName: $userName, password: $password, lightGray: lightGray)
+                Spacer()
                 Button(action: {
                     print("logging in")
                     if userName != "" && password != "" {
@@ -32,25 +37,34 @@ struct LoginView: View {
                     }
                 }, label: {
                     Text("Sign in")
-                }).padding()
-                    .background(lightGray)
-                    .cornerRadius(7)
+                        .foregroundColor(.black)
+                        .font(.system(size: 21))
+                        .bold()
+                }).frame(maxWidth: .infinity)
+                    .padding(20)
+                    .border(Color.black, width: 2)
+                    .background(.white)
                     
                 
-                Button(action: {
-                    print("Register")
-                    showLoginPage.toggle()
-                    showRegisterPage.toggle()
-                }, label: {
-                    Text("Register")
-                }).padding()
-                    .background(lightGray)
-                    .cornerRadius(7)
+               
+                HStack(spacing: 0) {
+                    Spacer()
+                    Text("Don't have an account? ")
+                    Text("Register here")
+                        .foregroundColor(.blue)
+                        .onTapGesture {
+                        showLoginPage.toggle()
+                        showRegisterPage.toggle()
+                    }
+                    Spacer()
+                }
+                
+                Spacer()
             }
            
-        }
+        }.padding(50)
             if showRegisterPage {
-                RegisterView(firestoreConnection: firestoreConnection)
+                RegisterView(firestoreConnection: firestoreConnection, showLoginPage: $showLoginPage, showRegisterPage: $showRegisterPage)
             }
             
             
@@ -67,21 +81,31 @@ struct LoginFieldsView: View {
     
     var body: some View {
         
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             
-            Text("Username")
-            TextField("Kalle@haj.se", text: $userName)
-                .frame(height: 30)
-                .background(lightGray)
+ 
+            HStack {
+                Image(systemName: "envelope")
+                TextField(" Your email", text: $userName)
+                    .font(.system(size: 22))
+                    .frame(height: 50)
+                    .background(.white)
                 .cornerRadius(7)
+            }
+            Rectangle().frame(height: 1)
+                .padding(.bottom, 5)
             
-            Text("Password")
-            SecureField("Hejhej", text: $password)
-                .frame(height: 30)
-                .background(lightGray)
+            HStack {
+                Image(systemName: "key")
+                SecureField(" Your password", text: $password)
+                    .font(.system(size: 22))
+                    .frame(height: 50)
+                    .background(.white)
                 .cornerRadius(7)
+            }.padding(.top, 5)
+            Rectangle().frame(height: 1)
             
-        }.padding(50)
+        }
         
         
     }
