@@ -51,17 +51,13 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
         }
         
         do {
-           // audioPlayer = try AVAudioPlayer(contentsOf: audio)
-
 
             let item = AVPlayerItem(url: audio)
             audioPlayer2 = AVPlayer(playerItem: item)
            
-            
-          // audioPlayer2.delegate = self
-          //  audioPlayer2.prepareToPlay()
             audioPlayer2.play()
             isPlaying = true
+            
         } catch let error {
             print("Playback failed \(error.localizedDescription)")
         }
@@ -69,7 +65,7 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
     }
     
     func stopPlayback() {
-       // audioPlayer.stop()
+
         audioPlayer2.pause()
         isPlaying = false
     }
