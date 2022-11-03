@@ -9,7 +9,18 @@
 /* Begin PBXBuildFile section */
 		3833F1E82900394000356843 /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3833F1E72900394000356843 /* NoteView.swift */; };
 		384D11A6290AF66B00B2E434 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384D11A5290AF66B00B2E434 /* AudioPlayer.swift */; };
+<<<<<<< Updated upstream
 		384D3D7C2913D2A500BE3E6B /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384D3D7B2913D2A500BE3E6B /* PlayerView.swift */; };
+=======
+		384D3D7E2913E75700BE3E6B /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384D3D7D2913E75700BE3E6B /* PlayerView.swift */; };
+		384D3D872914196700BE3E6B /* IBMPlexSansDevanagari-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 384D3D802914196700BE3E6B /* IBMPlexSansDevanagari-SemiBold.ttf */; };
+		384D3D882914196700BE3E6B /* IBMPlexSansDevanagari-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 384D3D812914196700BE3E6B /* IBMPlexSansDevanagari-Regular.ttf */; };
+		384D3D892914196700BE3E6B /* IBMPlexSansDevanagari-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 384D3D822914196700BE3E6B /* IBMPlexSansDevanagari-Medium.ttf */; };
+		384D3D8A2914196700BE3E6B /* IBMPlexSansDevanagari-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 384D3D832914196700BE3E6B /* IBMPlexSansDevanagari-Thin.ttf */; };
+		384D3D8B2914196700BE3E6B /* IBMPlexSansDevanagari-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 384D3D842914196700BE3E6B /* IBMPlexSansDevanagari-ExtraLight.ttf */; };
+		384D3D8C2914196700BE3E6B /* IBMPlexSansDevanagari-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 384D3D852914196700BE3E6B /* IBMPlexSansDevanagari-Light.ttf */; };
+		384D3D8D2914196700BE3E6B /* IBMPlexSansDevanagari-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 384D3D862914196700BE3E6B /* IBMPlexSansDevanagari-Bold.ttf */; };
+>>>>>>> Stashed changes
 		385035622911734A00A6BB2D /* UserRecording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385035612911734A00A6BB2D /* UserRecording.swift */; };
 		385E2831290DA65900D42B41 /* UserDocumentRecording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385E2830290DA65900D42B41 /* UserDocumentRecording.swift */; };
 		386731E728FDBED500BA0F3D /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 386731E628FDBED500BA0F3D /* AudioRecorder.swift */; };
@@ -62,7 +73,18 @@
 /* Begin PBXFileReference section */
 		3833F1E72900394000356843 /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
 		384D11A5290AF66B00B2E434 /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+<<<<<<< Updated upstream
 		384D3D7B2913D2A500BE3E6B /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+=======
+		384D3D7D2913E75700BE3E6B /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		384D3D802914196700BE3E6B /* IBMPlexSansDevanagari-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-SemiBold.ttf"; sourceTree = "<group>"; };
+		384D3D812914196700BE3E6B /* IBMPlexSansDevanagari-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-Regular.ttf"; sourceTree = "<group>"; };
+		384D3D822914196700BE3E6B /* IBMPlexSansDevanagari-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-Medium.ttf"; sourceTree = "<group>"; };
+		384D3D832914196700BE3E6B /* IBMPlexSansDevanagari-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-Thin.ttf"; sourceTree = "<group>"; };
+		384D3D842914196700BE3E6B /* IBMPlexSansDevanagari-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-ExtraLight.ttf"; sourceTree = "<group>"; };
+		384D3D852914196700BE3E6B /* IBMPlexSansDevanagari-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-Light.ttf"; sourceTree = "<group>"; };
+		384D3D862914196700BE3E6B /* IBMPlexSansDevanagari-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-Bold.ttf"; sourceTree = "<group>"; };
+>>>>>>> Stashed changes
 		385035612911734A00A6BB2D /* UserRecording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecording.swift; sourceTree = "<group>"; };
 		385E2830290DA65900D42B41 /* UserDocumentRecording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDocumentRecording.swift; sourceTree = "<group>"; };
 		386731E628FDBED500BA0F3D /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
@@ -124,6 +146,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		384D3D7F2914194E00BE3E6B /* Project_fonts */ = {
+			isa = PBXGroup;
+			children = (
+				384D3D862914196700BE3E6B /* IBMPlexSansDevanagari-Bold.ttf */,
+				384D3D842914196700BE3E6B /* IBMPlexSansDevanagari-ExtraLight.ttf */,
+				384D3D852914196700BE3E6B /* IBMPlexSansDevanagari-Light.ttf */,
+				384D3D822914196700BE3E6B /* IBMPlexSansDevanagari-Medium.ttf */,
+				384D3D812914196700BE3E6B /* IBMPlexSansDevanagari-Regular.ttf */,
+				384D3D802914196700BE3E6B /* IBMPlexSansDevanagari-SemiBold.ttf */,
+				384D3D832914196700BE3E6B /* IBMPlexSansDevanagari-Thin.ttf */,
+			);
+			path = Project_fonts;
+			sourceTree = "<group>";
+		};
 		386731E828FDC01000BA0F3D /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -186,6 +222,7 @@
 		388A275D28F823500019C70D /* VoiceNote */ = {
 			isa = PBXGroup;
 			children = (
+				384D3D7F2914194E00BE3E6B /* Project_fonts */,
 				388785BB290A749700ACD948 /* Connections */,
 				386731E928FDC1E000BA0F3D /* Info.plist */,
 				388A275E28F823500019C70D /* VoiceNoteApp.swift */,
@@ -340,9 +377,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				384D3D8B2914196700BE3E6B /* IBMPlexSansDevanagari-ExtraLight.ttf in Resources */,
+				384D3D892914196700BE3E6B /* IBMPlexSansDevanagari-Medium.ttf in Resources */,
 				388A276628F823530019C70D /* Preview Assets.xcassets in Resources */,
+				384D3D8A2914196700BE3E6B /* IBMPlexSansDevanagari-Thin.ttf in Resources */,
+				384D3D8C2914196700BE3E6B /* IBMPlexSansDevanagari-Light.ttf in Resources */,
+				384D3D872914196700BE3E6B /* IBMPlexSansDevanagari-SemiBold.ttf in Resources */,
+				384D3D8D2914196700BE3E6B /* IBMPlexSansDevanagari-Bold.ttf in Resources */,
 				388A276328F823530019C70D /* Assets.xcassets in Resources */,
 				387156E0290930FD00A0E01B /* GoogleService-Info.plist in Resources */,
+				384D3D882914196700BE3E6B /* IBMPlexSansDevanagari-Regular.ttf in Resources */,
 				387156DE29092BA000A0E01B /* techlove_logo-03 (1).png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
