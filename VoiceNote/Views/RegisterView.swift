@@ -19,7 +19,9 @@ struct RegisterView: View {
          
          VStack(alignment: .leading) {
              Spacer()
-             Text("Register new account").font(.system(size: 21))
+             Text("Register new account")
+                 .foregroundColor(.black)
+                 .font(.regular24)
              Spacer()
              RegisterFieldsView(dbConnection: firestoreConnection, userName: $userName, password: $password, lightGray: lightGray)
              Spacer()
@@ -34,8 +36,7 @@ struct RegisterView: View {
              }, label: {
                  Text("Sign up")
                      .foregroundColor(.black)
-                     .font(.system(size: 21))
-                     .bold()
+                     .font(.btnBold)
              }).frame(maxWidth: .infinity)
                      .padding(20)
                      .border(Color.black, width: 2)
@@ -51,7 +52,7 @@ struct RegisterView: View {
                          showRegisterPage.toggle()
                      }
                  Spacer()
-             }
+             }.font(.light16)
              Spacer()
              
          }.padding(50)
@@ -77,7 +78,7 @@ struct RegisterFieldsView: View {
             HStack {
                 Image(systemName: "envelope")
                 TextField("Your email", text: $userName)
-                    .font(.system(size: 22))
+                    .font(.regular24)
                     .frame(height: 50)
                     .background(.white)
             }
@@ -87,7 +88,7 @@ struct RegisterFieldsView: View {
             HStack {
                 Image(systemName: "key")
                 TextField("Your password", text: $password)
-                    .font(.system(size: 22))
+                    .font(.regular24)
                     .frame(height: 50)
                     .background(.white)
             }
@@ -96,7 +97,7 @@ struct RegisterFieldsView: View {
             HStack {
                 Image(systemName: "key")
                 TextField("Confirm password", text: $confirmPassword)
-                    .font(.system(size: 22))
+                    .font(.regular24)
                     .frame(height: 50)
                     .background(.white)
             }

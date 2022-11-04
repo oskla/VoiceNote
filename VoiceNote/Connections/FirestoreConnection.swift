@@ -159,14 +159,16 @@ class FirestoreConnection: ObservableObject {
     }
     
     func editNoteOnDb(noteToRemove: Note, noteToAdd: Note) {
-       // 
+       
+        
+        
         if let currentUser = currentUser {
             
+            if noteToRemove != noteToAdd {
             self.deleteNoteFromDb(note: noteToRemove)
             self.addNoteToDb(note: noteToAdd)
             
-          //  fireStore.collection("userData").document(currentUser.uid).updateData(["recording": FieldValue.arrayRemove([urlPath])])
-            
+            }
         }
         
     }

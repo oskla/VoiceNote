@@ -40,6 +40,13 @@
 		38A1FC6F290C018B00B46B03 /* AllRecordings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A1FC6E290C018B00B46B03 /* AllRecordings.swift */; };
 		38BFFC15290A8999007614D2 /* UserDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BFFC14290A8999007614D2 /* UserDocument.swift */; };
 		38BFFC17290A8F48007614D2 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BFFC16290A8F48007614D2 /* RegisterView.swift */; };
+		38FF604F291547C800195C1B /* IBMPlexSansDevanagari-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38FF604E291547C800195C1B /* IBMPlexSansDevanagari-Bold.ttf */; };
+		38FF605629154A7E00195C1B /* IBMPlexSansDevanagari-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38FF605029154A7D00195C1B /* IBMPlexSansDevanagari-Regular.ttf */; };
+		38FF605729154A7E00195C1B /* IBMPlexSansDevanagari-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38FF605129154A7D00195C1B /* IBMPlexSansDevanagari-Medium.ttf */; };
+		38FF605829154A7E00195C1B /* IBMPlexSansDevanagari-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38FF605229154A7D00195C1B /* IBMPlexSansDevanagari-ExtraLight.ttf */; };
+		38FF605929154A7E00195C1B /* IBMPlexSansDevanagari-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38FF605329154A7D00195C1B /* IBMPlexSansDevanagari-SemiBold.ttf */; };
+		38FF605A29154A7E00195C1B /* IBMPlexSansDevanagari-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38FF605429154A7E00195C1B /* IBMPlexSansDevanagari-Thin.ttf */; };
+		38FF605B29154A7E00195C1B /* IBMPlexSansDevanagari-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38FF605529154A7E00195C1B /* IBMPlexSansDevanagari-Light.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +98,13 @@
 		38A1FC6E290C018B00B46B03 /* AllRecordings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllRecordings.swift; sourceTree = "<group>"; };
 		38BFFC14290A8999007614D2 /* UserDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDocument.swift; sourceTree = "<group>"; };
 		38BFFC16290A8F48007614D2 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		38FF604E291547C800195C1B /* IBMPlexSansDevanagari-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-Bold.ttf"; sourceTree = "<group>"; };
+		38FF605029154A7D00195C1B /* IBMPlexSansDevanagari-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-Regular.ttf"; sourceTree = "<group>"; };
+		38FF605129154A7D00195C1B /* IBMPlexSansDevanagari-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-Medium.ttf"; sourceTree = "<group>"; };
+		38FF605229154A7D00195C1B /* IBMPlexSansDevanagari-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-ExtraLight.ttf"; sourceTree = "<group>"; };
+		38FF605329154A7D00195C1B /* IBMPlexSansDevanagari-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-SemiBold.ttf"; sourceTree = "<group>"; };
+		38FF605429154A7E00195C1B /* IBMPlexSansDevanagari-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-Thin.ttf"; sourceTree = "<group>"; };
+		38FF605529154A7E00195C1B /* IBMPlexSansDevanagari-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexSansDevanagari-Light.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +200,7 @@
 		388A275D28F823500019C70D /* VoiceNote */ = {
 			isa = PBXGroup;
 			children = (
+				38FF604D291547B600195C1B /* fonts */,
 				388785BB290A749700ACD948 /* Connections */,
 				386731E928FDC1E000BA0F3D /* Info.plist */,
 				388A275E28F823500019C70D /* VoiceNoteApp.swift */,
@@ -223,6 +238,20 @@
 				388A277B28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift */,
 			);
 			path = VoiceNoteUITests;
+			sourceTree = "<group>";
+		};
+		38FF604D291547B600195C1B /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				38FF604E291547C800195C1B /* IBMPlexSansDevanagari-Bold.ttf */,
+				38FF605229154A7D00195C1B /* IBMPlexSansDevanagari-ExtraLight.ttf */,
+				38FF605529154A7E00195C1B /* IBMPlexSansDevanagari-Light.ttf */,
+				38FF605129154A7D00195C1B /* IBMPlexSansDevanagari-Medium.ttf */,
+				38FF605029154A7D00195C1B /* IBMPlexSansDevanagari-Regular.ttf */,
+				38FF605329154A7D00195C1B /* IBMPlexSansDevanagari-SemiBold.ttf */,
+				38FF605429154A7E00195C1B /* IBMPlexSansDevanagari-Thin.ttf */,
+			);
+			path = fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -340,10 +369,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38FF605729154A7E00195C1B /* IBMPlexSansDevanagari-Medium.ttf in Resources */,
+				38FF605B29154A7E00195C1B /* IBMPlexSansDevanagari-Light.ttf in Resources */,
+				38FF605829154A7E00195C1B /* IBMPlexSansDevanagari-ExtraLight.ttf in Resources */,
 				388A276628F823530019C70D /* Preview Assets.xcassets in Resources */,
 				388A276328F823530019C70D /* Assets.xcassets in Resources */,
 				387156E0290930FD00A0E01B /* GoogleService-Info.plist in Resources */,
 				387156DE29092BA000A0E01B /* techlove_logo-03 (1).png in Resources */,
+				38FF605A29154A7E00195C1B /* IBMPlexSansDevanagari-Thin.ttf in Resources */,
+				38FF605629154A7E00195C1B /* IBMPlexSansDevanagari-Regular.ttf in Resources */,
+				38FF605929154A7E00195C1B /* IBMPlexSansDevanagari-SemiBold.ttf in Resources */,
+				38FF604F291547C800195C1B /* IBMPlexSansDevanagari-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

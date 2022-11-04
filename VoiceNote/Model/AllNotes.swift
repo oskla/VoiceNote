@@ -60,6 +60,13 @@ class AllNotes: ObservableObject {
    
     }
     
+    func sortNotes(notes: [Note]) -> [Note]{
+        
+        let reverserdNotes: [Note] = Array(notes.reversed())
+        
+        print("Reversed notes \(reverserdNotes)")
+        return reverserdNotes
+    }
     
     func getLatestRecording(audioRecorder: AudioRecorder, selectedNote: Note) -> Recording? {
         guard let currentRecording = audioRecorder.recordings.last else {

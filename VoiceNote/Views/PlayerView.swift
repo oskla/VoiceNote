@@ -8,6 +8,8 @@ struct PlayerView: View {
     var body: some View {
 
         ZStack {
+            HStack {
+                
             VStack {
                 if audioPlayer.isPlaying == false {
                 Button(action: {
@@ -19,9 +21,9 @@ struct PlayerView: View {
 
                 }) {
                     Image(systemName: "play.fill")
-                        .imageScale(.large)
+                        .font(.system(size: 40))
                         .foregroundColor(.black)
-                }.padding()
+                }//.padding()
                 } else {
                     
                         Button(action: {
@@ -29,20 +31,33 @@ struct PlayerView: View {
                             print("Stop playing audio")
                         }) {
                             Image(systemName: "stop.fill")
-                                .imageScale(.large)
+                                .font(.system(size: 40))
                                 .foregroundColor(.black)
-                        }.padding()
+                        }//.padding()
+                }
+            }.frame(width: 40, height: 40)
+            .padding()
+                Spacer()
+                
+                HStack {
+                    ScrollView(.horizontal) {
+                    Text(selectedRecording?.name ?? "No name") // TODO: What should recording be called?
+                        .lineLimit(1)
+                        .padding()
+                    }
+                    Spacer()
                 }
             }
-
-        }.frame(maxWidth: .infinity).background(.blue)
+        }.frame(maxWidth: .infinity).background(.ultraThinMaterial)
+            .border(Color.black, width: 1)
 
 
     }
 }
 
+
 struct PlayerView_Previews: PreviewProvider {
     static var previews: some View {
-        PlayerView(audioPlayer: AudioPlayer(), selectedRecording: .constant( UserDocumentRecording(id: "234", name: "låt 1")))
+        PlayerView(audioPlayer: AudioPlayer(), selectedRecording: .constant( UserDocumentRecording(id: "234", name: "Gitarrlåt nummer 1 (ny refräng)")))
     }
 }

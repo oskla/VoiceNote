@@ -39,10 +39,12 @@ class AudioPlayer: NSObject, ObservableObject, AVAudioPlayerDelegate {
         do {
 
             let item = AVPlayerItem(url: audio)
+           
+            
             audioPlayer2 = AVPlayer(playerItem: item)
             audioPlayer2.play()
             isPlaying = true
-            
+          
             NotificationCenter.default.addObserver(
                 self,
                 selector: #selector(fileComplete),

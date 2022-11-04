@@ -25,7 +25,9 @@ struct LoginView: View {
             if showLoginPage {
                 
                 Spacer()
-                Text("Login to your account").font(.system(size: 21))
+                Text("Login to your account")
+                    .font(.regular24)
+                    
                 Spacer()
                 LoginFieldsView(userName: $userName, password: $password, lightGray: lightGray)
                 Spacer()
@@ -38,8 +40,10 @@ struct LoginView: View {
                 }, label: {
                     Text("Sign in")
                         .foregroundColor(.black)
-                        .font(.system(size: 21))
-                        .bold()
+                        .font(.btnBold)
+                            
+                        //.font(.system(size: 21))
+                       // .bold()
                 }).frame(maxWidth: .infinity)
                     .padding(20)
                     .border(Color.black, width: 2)
@@ -57,12 +61,13 @@ struct LoginView: View {
                         showRegisterPage.toggle()
                     }
                     Spacer()
-                }
+                }.font(.light16)
                 
                 Spacer()
             }
            
-        }.padding(50)
+            }.onAppear{userName = "4@4.se";password = "Hejhej"}
+            .padding(50)
             if showRegisterPage {
                 RegisterView(firestoreConnection: firestoreConnection, showLoginPage: $showLoginPage, showRegisterPage: $showRegisterPage)
             }
@@ -87,7 +92,7 @@ struct LoginFieldsView: View {
             HStack {
                 Image(systemName: "envelope")
                 TextField(" Your email", text: $userName)
-                    .font(.system(size: 22))
+                    .font(.regular24)
                     .frame(height: 50)
                     .background(.white)
                 .cornerRadius(7)
@@ -98,7 +103,7 @@ struct LoginFieldsView: View {
             HStack {
                 Image(systemName: "key")
                 SecureField(" Your password", text: $password)
-                    .font(.system(size: 22))
+                    .font(.regular24)
                     .frame(height: 50)
                     .background(.white)
                 .cornerRadius(7)
