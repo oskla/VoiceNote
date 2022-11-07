@@ -170,11 +170,12 @@ struct RecordingEditNoteView: View {
     var body: some View {
         
         ZStack {
-            Rectangle().frame(maxWidth: .infinity, maxHeight: .infinity)
+            Rectangle()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea()
-                .foregroundColor(Color.init(red: 220/255, green: 220/255, blue: 220/255))
-                .cornerRadius(15)
-                .shadow(color: Color.init(red: 193/255, green: 193/255, blue:193/255), radius: 20, x: 0, y: -2)
+                .foregroundColor(.white).opacity(0.97)
+               // .background(.white)
+                .border(Color.black, width: 1)
             
             VStack {
                 Spacer()
@@ -184,18 +185,23 @@ struct RecordingEditNoteView: View {
                     guard let userDocument = firestoreConnection.userDocument else { return }
                     self.audioRecorder.stopRecording(db: firestoreConnection, userDocument: userDocument, allRecordings: allRecordings, selectedNoteId: "\(selectedNote.id)")
                     
-                    showRecordPopup = false
+                    withAnimation {
+                        showRecordPopup = false
+                    }
+                    
                     showEditTabView = true
                     
                     
                 }) {
                     Image(systemName: "stop.circle")
-                        .font(.system(size: 100))
-                        .foregroundStyle(.pink, .gray)
+                        .font(.system(size: 70))
+                        .foregroundStyle(.red, .black)
                     
                 }
-                Spacer()
                 Text("Recording...")
+                    .font(.light18)
+                    .foregroundColor(.black)
+                    .padding(.top, 10)
                 Spacer()
             }
             
@@ -209,44 +215,44 @@ struct RecordingEditNoteView: View {
     
 }
 
-struct RecordingsList: View {
-    
-    @EnvironmentObject var firestoreConnection: FirestoreConnection
-    @EnvironmentObject var audioRecorder: AudioRecorder
-    @Binding var selectedNote: Note
-    @State var selectedRecording: String?
-    
-    
-    func removeRows(at offsets: IndexSet) {
-        if var userDocument = firestoreConnection.userDocument {
-            // userDocument.recording.remove(atOffsets: offsets)
-            
-        }
-        
-    }
-    
-    
-    var body: some View {
-        List() {
-            
-            if let userDocument = firestoreConnection.userDocument {
-                
-                if let recordings = userDocument.recording {
-                    
-                    //                ForEach(recordings, id: \.self) {
-                    //                    recording in
-                    //
-                    //                 //   RecordingRow(audioURL: recording)
-                    //
-                    //
-                    //                }.onDelete(perform: removeRows)
-                }
-                
-            }
-            Text("Empty list")
-        }.listStyle(SidebarListStyle())
-    }
-}
+//struct RecordingsList: View {
+//    
+//    @EnvironmentObject var firestoreConnection: FirestoreConnection
+//    @EnvironmentObject var audioRecorder: AudioRecorder
+//   // @Binding var selectedNote: Note
+//    @State var selectedRecording: String?
+//    
+//    
+//    func removeRows(at offsets: IndexSet) {
+//        if var userDocument = firestoreConnection.userDocument {
+//            // userDocument.recording.remove(atOffsets: offsets)
+//            
+//        }
+//        
+//    }
+//    
+//    
+//    var body: some View {
+//        List() {
+//            
+//            if let userDocument = firestoreConnection.userDocument {
+//                
+//                if let recordings = userDocument.recording {
+//                    
+//                    //                ForEach(recordings, id: \.self) {
+//                    //                    recording in
+//                    //
+//                    //                 //   RecordingRow(audioURL: recording)
+//                    //
+//                    //
+//                    //                }.onDelete(perform: removeRows)
+//                }
+//                
+//            }
+//            Text("Empty list")
+//        }.listStyle(SidebarListStyle())
+//    }
+//}
 
 // MARK: Recording Menu
 struct RecordingMenu: View {
@@ -287,42 +293,42 @@ struct RecordingMenu: View {
     }
 }
 //
-struct RecordingRow: View {
-    var audioURL: String
-    @EnvironmentObject var firestoreConnection: FirestoreConnection
-    @ObservedObject var audioPlayer = AudioPlayer()
-    
-    var body: some View {
-        
-        HStack {
-            
-            Text(audioURL)
-            Spacer()
-            if audioPlayer.isPlaying == false {
-                Button(action: {
-                    
-                    if let url = URL(string: audioURL) {
-                        self.audioPlayer.startPlayback(audio: url)
-                        print("Start playing audio")
-                    }
-                    
-                }) {
-                    Image(systemName: "play.circle")
-                        .imageScale(.large)
-                }
-            } else {
-                Button(action: {
-                    self.audioPlayer.stopPlayback()
-                    print("Stop playing audio")
-                }) {
-                    Image(systemName: "stop.fill")
-                        .imageScale(.large)
-                }
-            }
-        }
-        
-    }
-}
+//struct RecordingRow: View {
+//    var audioURL: String
+//    @EnvironmentObject var firestoreConnection: FirestoreConnection
+//    @ObservedObject var audioPlayer = AudioPlayer()
+//    
+//    var body: some View {
+//        
+//        HStack {
+//            
+//            Text(audioURL)
+//            Spacer()
+//            if audioPlayer.isPlaying == false {
+//                Button(action: {
+//                    
+//                    if let url = URL(string: audioURL) {
+//                        self.audioPlayer.startPlayback(audio: url)
+//                        print("Start playing audio")
+//                    }
+//                    
+//                }) {
+//                    Image(systemName: "play.circle")
+//                        .imageScale(.large)
+//                }
+//            } else {
+//                Button(action: {
+//                    self.audioPlayer.stopPlayback()
+//                    print("Stop playing audio")
+//                }) {
+//                    Image(systemName: "stop.fill")
+//                        .imageScale(.large)
+//                }
+//            }
+//        }
+//        
+//    }
+//}
 
 struct RecordingSubMenuRow: View {
     @EnvironmentObject var firestoreConnection: FirestoreConnection

@@ -16,7 +16,7 @@ struct UserDocument: Identifiable, Codable, Equatable {
     var name: String
     var recording: [UserDocumentRecording]?   // [UserDocumentRecording]
     var notes: [Note]?
-    
+    var recCounter: Double?
    
     
 }

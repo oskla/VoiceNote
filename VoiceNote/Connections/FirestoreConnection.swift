@@ -19,7 +19,8 @@ class FirestoreConnection: ObservableObject {
     
     @Published var userLoggedIn = false
     @Published var currentUser: User?
-    @Published var userDocument: UserDocument?    
+    @Published var userDocument: UserDocument?
+    @Published var recCounter: Double?
      
      var userDocumentListener: ListenerRegistration?
     
@@ -139,15 +140,23 @@ class FirestoreConnection: ObservableObject {
             fireStore.collection("userData").document(currentUser.uid).updateData([
                 "recording": FieldValue.arrayUnion([[
                     "name": urlPath,
-                    "id": id
+                    "id": id,
+                    "recNumber": userDocument?.recCounter ?? 0 + 1.0
                     
                ]])
             ])
+            
+            
+            fireStore.collection("userData").document(currentUser.uid).updateData([
+                "recCounter": FieldValue.increment(1.0)
+            ])
+            
             
             print("upload should be done. urlPath: \(urlPath), currentUser: \(currentUser)")
         } else {
             print("Something went wrong when uploading to Firestore")
         }
+        
         
     }
     

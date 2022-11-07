@@ -35,9 +35,10 @@ extension Font {
     // Bold
     static let btnBold = Font.custom("IBMPlexSansDevanagari-Bold", size: Font.TextStyle.title3.size, relativeTo: .caption)
     static let bold21 = Font.custom("IBMPlexSansDevanagari-Bold", size: Font.TextStyle.caption.size, relativeTo: .caption)
-    
+    static let bold34 = Font.custom("IBMPlexSansDevanagari-Bold", size: Font.TextStyle.title2.size, relativeTo: .caption)
     // Regular
     static let regular24 = Font.custom("IBMPlexSansDevanagari-Regular", size: Font.TextStyle.title3.size, relativeTo: .caption)
+    static let regular21 = Font.custom("IBMPlexSansDevanagari-Regular", size: Font.TextStyle.caption.size, relativeTo: .caption)
     static let regular18 = Font.custom("IBMPlexSansDevanagari-Regular", size: Font.TextStyle.headline.size, relativeTo: .caption)
     
     // Light

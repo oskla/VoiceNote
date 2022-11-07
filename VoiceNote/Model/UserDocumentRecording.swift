@@ -9,9 +9,11 @@ import Foundation
 
 struct UserDocumentRecording: Identifiable, Codable, Hashable {
 
+
     var id = ""
-  //  var url: URL
     var name: String?
-  //  var createdAt: String?
+    var nickName: String?
+    var recNumber: Double?
+
     
 }

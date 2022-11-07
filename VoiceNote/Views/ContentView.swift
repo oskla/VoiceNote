@@ -16,6 +16,10 @@ import FirebaseStorage
 // https://blckbirds.com/post/voice-recorder-app-in-swiftui-2/
 
 // TODO: When recording from Home. Assign that recording to menu
+// TODO: Design new CustomTabView
+// TODO: Add RecordingsList
+// TODO: Design new "play-list" - maybe don't use the "menu"
+// TODO: Redesign notes-list
 
 // MARK: ContentView
 
@@ -29,6 +33,8 @@ struct ContentView: View {
     @State var showRecordPopup = false
     @State var showTabViewPopup = true
     @State var showEditTabView = true
+    @State var notesOrRecordings = "notes"
+    @State var showPicker = true
     
     
     
@@ -36,17 +42,39 @@ struct ContentView: View {
         
         ZStack {
             
+            
+            
             if firestoreConnection.userLoggedIn == true {
                 
                 NavigationView {
-                    NotesHomeView(showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
+                    
+                    VStack  {
+                        if showPicker {
+                            PickerView(notesOrRecordings: $notesOrRecordings).padding()
+                        }
+                    
+                        
+                        if notesOrRecordings == "notes" {
+                            NotesHomeView(showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView, showPicker: $showPicker)
+                        }
+                        
+                        if notesOrRecordings == "recordings" {
+                            RecordingsListPickerView(showPicker: $showPicker)
+                        }
+                       
+                    }
+                   
+                    
                     
                 }
-                
+
                 // If not logged in
             } else {
                 LoginView()
             }
+            
+            // Move this out later
+           
         }.environmentObject(allNotes)
             .environmentObject(audioRecorder)
             .environmentObject(firestoreConnection)
@@ -59,9 +87,12 @@ struct ContentView: View {
 struct NotesHomeView: View {
     @EnvironmentObject var allNotes: AllNotes
     @EnvironmentObject var audioRecorder: AudioRecorder
+    @EnvironmentObject var allRecordings: AllRecordings
+    @EnvironmentObject var firestoreConnection: FirestoreConnection
     @Binding var showRecordPopup: Bool
     @Binding var showTabViewPopup: Bool
     @Binding var showEditTabView: Bool
+    @Binding var showPicker: Bool
     
     
     var body: some View {
@@ -69,13 +100,13 @@ struct NotesHomeView: View {
         NavigationView {
           
             VStack(spacing: 0) {
-                NotesList(showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabView)
+                NotesList(showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabView, showPicker: $showPicker)
                 
                 
                 if showTabViewPopup {
                     
                     VStack {
-                        CustomTabViewHome(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup)
+                        CustomTabViewHome(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showPicker: $showPicker)
                             .frame(height: 90)
                         
                     }
@@ -85,7 +116,6 @@ struct NotesHomeView: View {
             .overlay(alignment: .bottom) {
                 if showRecordPopup {
                     Recording2View(showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
-                        .padding()
                         .transition(.move(edge: .bottom))
                         
                 }
@@ -93,6 +123,9 @@ struct NotesHomeView: View {
             
             .onAppear{
                 showTabViewPopup = true
+                showPicker = true
+               // allRecordings.setCurrentRecNumber(db: firestoreConnection)
+               print("recNumber: \(firestoreConnection.userDocument?.recCounter)")
             }
             
         }.navigationBarTitle("Notes", displayMode: .inline)
@@ -110,6 +143,7 @@ struct NotesList: View {
     @Binding var showRecordPopup: Bool
     @Binding var showEditTabView: Bool
     @State var myNote: Note?
+    @Binding var showPicker: Bool
     
     func getNote(note: Note) {
         myNote = note
@@ -125,7 +159,7 @@ struct NotesList: View {
                         note in
                         
                         
-                        NavigationLink(destination: EditNoteView( showRecordPopup: $showRecordPopup, selectedNote: note, showEditTabVew: $showEditTabView)) {
+                        NavigationLink(destination: EditNoteView( showRecordPopup: $showRecordPopup, showPicker: $showPicker, showEditTabVew: $showEditTabView, selectedNote: note)) {
                             ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent, hasRecording: allNotes.hasRecordings(noteId: "\(note.id)", db: firestoreConnection))
                                 .listRowBackground(Color.init(red: 245/255, green: 245/255, blue: 245/255))
                             
@@ -184,7 +218,7 @@ struct NewNoteView: View {
     @State var noteContent = ""
     @State var noteTitle: String = "New note"
     @State var selectedNewNote = Note(noteTitle: "New Note", noteContent: "")
-    
+    @Binding var showPicker: Bool
     
     var body: some View {
         
@@ -201,6 +235,9 @@ struct NewNoteView: View {
             
             
         }.navigationBarTitle("", displayMode: .inline)
+            .onAppear {
+                showPicker = false
+            }
             .onDisappear {
                 
                 if noteTitle != "New note" || noteContent != "" {
@@ -212,13 +249,9 @@ struct NewNoteView: View {
     }
 }
 
-// MARK: EditNote
+
 
 struct ExitKeyboardBar: View {
-    
-  //  @Binding var showExitBtn: Bool
-    
-   // var contentIsFocused: FocusState<Bool>.Binding
     
     var body: some View {
         
@@ -231,21 +264,11 @@ struct ExitKeyboardBar: View {
             
         Image(systemName: "keyboard.chevron.compact.down")
                 
-//                Button(action: {
-//                  //  showEditTabView = true
-//                  //  showExitBtn = false
-//                  //  contentIsFocused.wrappedValue = true
-//                },
-//                       label: {
-//                    Label("", systemImage: "keyboard.chevron.compact.down")
-//                        .font(.system(size: 50))
-//
-//                
-//            })
-        
     }
 }
 }
+
+// MARK: EditNote
 
 struct EditNoteView: View {
     
@@ -254,9 +277,10 @@ struct EditNoteView: View {
     @EnvironmentObject var allNotes: AllNotes
     @EnvironmentObject var audioRecorder: AudioRecorder
     @Binding var showRecordPopup: Bool
+    @Binding var showPicker: Bool
+    @Binding var showEditTabVew: Bool
     
     @State var selectedNote: Note
-    @Binding var showEditTabVew: Bool
     @State var showPlayer = false
     @State var selectedRecording: UserDocumentRecording?
     @StateObject var audioPlayer = AudioPlayer()
@@ -271,11 +295,13 @@ struct EditNoteView: View {
             VStack(spacing: 0) {
                 
                 TextField("New recording", text: $selectedNote.noteTitle)
-                    .font(.system(size: 30).bold())
+                    .font(.bold34)
+                    //.font(.system(size: 30).bold())
                     .padding(.horizontal)
                 
                 
                 TextEditor(text: $selectedNote.noteContent)
+                    .font(.regular21)
                     .background(.cyan)
                     .padding(.horizontal)
                     .focused($contentIsFocused)
@@ -285,7 +311,7 @@ struct EditNoteView: View {
                 if showPlayer {
                     PlayerView(audioPlayer: audioPlayer, selectedRecording: $selectedRecording)
                         .padding()
-                        .transition(.move(edge: .leading))
+                        .transition(.move(edge: .bottom))
                     
                 }
                 
@@ -294,11 +320,7 @@ struct EditNoteView: View {
                 }
                 
                 
-                if showRecordPopup {
-                    RecordingEditNoteView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
-
-                    
-                }
+                
                 
                 if contentIsFocused {
                     ExitKeyboardBar()
@@ -320,10 +342,20 @@ struct EditNoteView: View {
             
         }.onAppear{
             noteToRemove = selectedNote
+            if showEditTabVew == false {
+                showEditTabVew = true
+            }
+            showPicker = false
         }
         .navigationBarTitle("", displayMode: .inline)
         
         .onDisappear { firestoreConnection.editNoteOnDb(noteToRemove: noteToRemove!, noteToAdd: selectedNote) }
+        .overlay(alignment: .bottom) {
+            if showRecordPopup {
+            RecordingEditNoteView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
+                .transition(.move(edge: .bottom))
+            
+        } }
     }
     
     
@@ -373,8 +405,11 @@ struct CustomTabViewNotes: View {
                 Spacer()
                 
                 Button(action: {
-                    showRecordPopup = true
-                    showEditTabView = false
+                    withAnimation {
+                        showRecordPopup = true
+                    }
+                    
+                   // showEditTabView = false
                     // print(selectedNote)
                 },
                        label: {
@@ -398,6 +433,7 @@ struct CustomTabViewNotes: View {
 struct CustomTabViewHome: View {
     @ObservedObject var audioRecorder: AudioRecorder
     @Binding var showRecordPopup: Bool
+    @Binding var showPicker: Bool
     var body: some View {
         
         ZStack {
@@ -409,7 +445,7 @@ struct CustomTabViewHome: View {
             
             HStack {
                 Spacer()
-                NavigationLink(destination: NewNoteView(), label: {
+                NavigationLink(destination: NewNoteView(showPicker: $showPicker), label: {
                     Label("", systemImage: "square.and.pencil")
                         .font(.system(size: 50))
                         .foregroundStyle(.gray)
@@ -446,7 +482,7 @@ struct CustomTabViewHome: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        // ContentView(audioRecorder: AudioRecorder()).environmentObject(AllNotes())
+        ContentView(audioRecorder: AudioRecorder(), notesOrRecordings: "notes").environmentObject(AllNotes())
          // NotesHomeView(showRecordPopup: .constant(false), showTabViewPopup: .constant(true), showEditTabView: .constant(false))
         //  .environmentObject(AllNotes())
         
@@ -460,7 +496,7 @@ struct ContentView_Previews: PreviewProvider {
         // RecordingView(audioRecorder: AudioRecorder())
       //  CustomTabViewHome(audioRecorder: AudioRecorder(), showRecordPopup: .constant(false))
         
-        ExitKeyboardBar()
+      //  ExitKeyboardBar()
     }
 }
 

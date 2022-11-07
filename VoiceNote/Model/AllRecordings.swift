@@ -10,6 +10,12 @@ import Foundation
 class AllRecordings: ObservableObject, Identifiable {
     
     @Published var recordingsList = [UserDocumentRecording]()
+    @Published var recNumber: Bool?
+    
+    init() {
+        addRecording(recording: UserDocumentRecording(name: "rec1"))
+        addRecording(recording: UserDocumentRecording(name: "rec2"))
+    }
     
     func addRecording(recording: UserDocumentRecording) {
             
@@ -66,7 +72,23 @@ class AllRecordings: ObservableObject, Identifiable {
         }
     }
     
-    func getAndAddMetaDataFromAllStorageFiles() {
+    // Call on this
+    func setCurrentRecNumber(db: FirestoreConnection) {
+        
+        
+        guard let recordings = db.userDocument?.recording else { return }
+        
+        let maxRec = recordings.max(by: {
+            if $0.recNumber == nil { return false }
+            if $1.recNumber == nil { return false }
+            
+            return $0.recNumber! < $1.recNumber!
+            
+        })
+        
+        print("maxRec: \(maxRec)")
+        
+      //  recNumber = maxRec
         
     }
     
@@ -83,10 +105,6 @@ class AllRecordings: ObservableObject, Identifiable {
        // filtered[0].name = name
     }
     
-    func addRecordingsToNote() {
-        
-        
-        
-    }
+
     
 }
