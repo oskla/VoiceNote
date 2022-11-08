@@ -28,10 +28,7 @@ struct RecordingView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea()
                 .background(.ultraThinMaterial)
-               // .foregroundColor(Color.init(red: 220/255, green: 220/255, blue: 220/255).opacity(0.4))
-               // .foregroundColor(Color.init(red: 220/255, green: 220/255, blue: 220/255))
                 .cornerRadius(15)
-              //  .shadow(color: Color.init(red: 193/255, green: 193/255, blue:193/255), radius: 30, x: 0, y: -2)
             VStack {
                 Spacer()
                 
@@ -42,7 +39,7 @@ struct RecordingView: View {
                     
                     self.audioRecorder.stopRecording(db: firestoreConnection, userDocument: userDocument, allRecordings: allRecordings, selectedNoteId: "\(newUUID)")
                     
-                    let newNote = Note(id: newUUID, noteTitle: "new recording", noteContent: "")
+                    let newNote = Note(id: newUUID, noteTitle: "New recording", noteContent: "")
                     allNotes.addEntry(newNote: newNote)
                     
                     firestoreConnection.addNoteToDb(note: newNote)
@@ -115,7 +112,7 @@ struct Recording2View: View {
                     
                     self.audioRecorder.stopRecording(db: firestoreConnection, userDocument: userDocument, allRecordings: allRecordings, selectedNoteId: "\(newUUID)")
                     
-                    let newNote = Note(id: newUUID, noteTitle: "new recording", noteContent: "")
+                    let newNote = Note(id: newUUID, noteTitle: "New recording", noteContent: "")
                     allNotes.addEntry(newNote: newNote)
                     
                     firestoreConnection.addNoteToDb(note: newNote)

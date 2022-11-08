@@ -87,7 +87,7 @@ struct RegisterFieldsView: View {
       
             HStack {
                 Image(systemName: "key")
-                TextField("Your password", text: $password)
+                SecureField("Your password", text: $password)
                     .font(.regular24)
                     .frame(height: 50)
                     .background(.white)
@@ -96,7 +96,7 @@ struct RegisterFieldsView: View {
                 .padding(.bottom, 5)
             HStack {
                 Image(systemName: "key")
-                TextField("Confirm password", text: $confirmPassword)
+                SecureField("Confirm password", text: $confirmPassword)
                     .font(.regular24)
                     .frame(height: 50)
                     .background(.white)

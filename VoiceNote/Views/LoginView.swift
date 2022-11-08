@@ -66,7 +66,7 @@ struct LoginView: View {
                 Spacer()
             }
            
-            }.onAppear{userName = "5@5.se";password = "Hejhej"}
+            }.onAppear{userName = "8@8.se";password = "Hejhej"}
             .padding(50)
             if showRegisterPage {
                 RegisterView(firestoreConnection: firestoreConnection, showLoginPage: $showLoginPage, showRegisterPage: $showRegisterPage)

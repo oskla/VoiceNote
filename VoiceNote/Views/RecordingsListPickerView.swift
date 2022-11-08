@@ -11,11 +11,34 @@ struct RecordingsListPickerView: View {
     @EnvironmentObject var firestoreConnection: FirestoreConnection
     @EnvironmentObject var audioRecorder: AudioRecorder
     @Binding var showPicker: Bool
+    @Binding var showCustomTabView: Bool
+    @Binding var showRecordPopup: Bool
+    @Binding var showEditTabView: Bool
     
     var body: some View {
-        RecordingsList().onAppear {
-            showPicker = true
+        
+        
+        VStack(spacing: 0) {
+            RecordingsList().onAppear {
+                showPicker = true
+  
+            }
+            VStack {
+                CustomTabViewHome(showRecordPopup: $showRecordPopup, showPicker: $showPicker)
+                    .frame(height: 90)
+                
+            }
+        }.onAppear {
+            showCustomTabView = true
         }
+        .navigationBarTitle("Recordings")
+            .overlay(alignment: .bottom) {
+                if showRecordPopup {
+                    Recording2View(showRecordPopup: $showRecordPopup, showTabViewPopup: $showCustomTabView, showEditTabView: $showEditTabView)
+                        .transition(.move(edge: .bottom))
+                        
+                }
+            }
     }
 }
 
@@ -23,7 +46,6 @@ struct RecordingsList: View {
     
     @EnvironmentObject var firestoreConnection: FirestoreConnection
     @EnvironmentObject var audioRecorder: AudioRecorder
-   // @Binding var selectedNote: Note
     @State var selectedRecording: String?
     
     
@@ -45,7 +67,7 @@ struct RecordingsList: View {
                                     ForEach(recordings, id: \.self) {
                                         recording in
                     
-                                        RecordingRow(audioURL: "new recording " + "\(recording.recNumber ?? 0.0)")
+                                        RecordingRow(audioURL: "New recording " + "\(recording.recNumber ?? 0)")
                     
                     
                                     }.onDelete(perform: removeRows)
@@ -96,6 +118,6 @@ struct RecordingRow: View {
 
 struct RecordingsListPickerView_Previews: PreviewProvider {
     static var previews: some View {
-        RecordingsListPickerView(showPicker: .constant(true))
+        RecordingsListPickerView(showPicker: .constant(true), showCustomTabView: .constant(true), showRecordPopup: .constant(false), showEditTabView: .constant(false)).environmentObject(FirestoreConnection())
     }
 }

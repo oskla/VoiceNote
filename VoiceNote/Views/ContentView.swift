@@ -15,11 +15,11 @@ import FirebaseStorage
 
 // https://blckbirds.com/post/voice-recorder-app-in-swiftui-2/
 
+// TODO: Make function that changes name of recording (so i dont have to do it in view)
 // TODO: When recording from Home. Assign that recording to menu
 // TODO: Design new CustomTabView
-// TODO: Add RecordingsList
 // TODO: Design new "play-list" - maybe don't use the "menu"
-// TODO: Redesign notes-list
+
 
 // MARK: ContentView
 
@@ -42,8 +42,6 @@ struct ContentView: View {
         
         ZStack {
             
-            
-            
             if firestoreConnection.userLoggedIn == true {
                 
                 NavigationView {
@@ -59,12 +57,10 @@ struct ContentView: View {
                         }
                         
                         if notesOrRecordings == "recordings" {
-                            RecordingsListPickerView(showPicker: $showPicker)
+                            RecordingsListPickerView(showPicker: $showPicker, showCustomTabView: $showTabViewPopup, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabView)
                         }
                        
                     }
-                   
-                    
                     
                 }
 
@@ -73,7 +69,6 @@ struct ContentView: View {
                 LoginView()
             }
             
-            // Move this out later
            
         }.environmentObject(allNotes)
             .environmentObject(audioRecorder)
@@ -106,7 +101,7 @@ struct NotesHomeView: View {
                 if showTabViewPopup {
                     
                     VStack {
-                        CustomTabViewHome(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showPicker: $showPicker)
+                        CustomTabViewHome(showRecordPopup: $showRecordPopup, showPicker: $showPicker)
                             .frame(height: 90)
                         
                     }
@@ -121,7 +116,7 @@ struct NotesHomeView: View {
                 }
             }
             
-            .onAppear{
+            .onAppear {
                 showTabViewPopup = true
                 showPicker = true
                // allRecordings.setCurrentRecNumber(db: firestoreConnection)
@@ -431,7 +426,7 @@ struct CustomTabViewNotes: View {
 }
 
 struct CustomTabViewHome: View {
-    @ObservedObject var audioRecorder: AudioRecorder
+    @EnvironmentObject var audioRecorder: AudioRecorder
     @Binding var showRecordPopup: Bool
     @Binding var showPicker: Bool
     var body: some View {

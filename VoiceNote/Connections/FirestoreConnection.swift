@@ -20,7 +20,7 @@ class FirestoreConnection: ObservableObject {
     @Published var userLoggedIn = false
     @Published var currentUser: User?
     @Published var userDocument: UserDocument?
-    @Published var recCounter: Double?
+    @Published var recCounter: Int64?
      
      var userDocumentListener: ListenerRegistration?
     
@@ -141,14 +141,14 @@ class FirestoreConnection: ObservableObject {
                 "recording": FieldValue.arrayUnion([[
                     "name": urlPath,
                     "id": id,
-                    "recNumber": userDocument?.recCounter ?? 0 + 1.0
+                    "recNumber": userDocument?.recCounter ?? 0 + 1
                     
                ]])
             ])
             
             
             fireStore.collection("userData").document(currentUser.uid).updateData([
-                "recCounter": FieldValue.increment(1.0)
+                "recCounter": FieldValue.increment(Int64(1))
             ])
             
             

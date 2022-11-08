@@ -13,7 +13,7 @@ struct UserDocumentRecording: Identifiable, Codable, Hashable {
     var id = ""
     var name: String?
     var nickName: String?
-    var recNumber: Double?
+    var recNumber: Int64?
 
     
 }
