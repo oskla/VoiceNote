@@ -15,10 +15,12 @@ import FirebaseStorage
 
 // https://blckbirds.com/post/voice-recorder-app-in-swiftui-2/
 
-// TODO: Make function that changes name of recording (so i dont have to do it in view)
+
 // TODO: When recording from Home. Assign that recording to menu
 // TODO: Design new CustomTabView
 // TODO: Design new "play-list" - maybe don't use the "menu"
+// TODO: Kunna assigna recording till note i efterhand
+// TODO: Kunna dela note/recording 
 
 
 // MARK: ContentView
@@ -46,7 +48,7 @@ struct ContentView: View {
                 
                 NavigationView {
                     
-                    VStack  {
+                    VStack(spacing: 0)  {
                         if showPicker {
                             PickerView(notesOrRecordings: $notesOrRecordings).padding()
                         }
@@ -92,7 +94,7 @@ struct NotesHomeView: View {
     
     var body: some View {
         
-        NavigationView {
+       
           
             VStack(spacing: 0) {
                 NotesList(showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabView, showPicker: $showPicker)
@@ -102,7 +104,6 @@ struct NotesHomeView: View {
                     
                     VStack {
                         CustomTabViewHome(showRecordPopup: $showRecordPopup, showPicker: $showPicker)
-                            .frame(height: 90)
                         
                     }
                 }
@@ -114,8 +115,9 @@ struct NotesHomeView: View {
                         .transition(.move(edge: .bottom))
                         
                 }
+                    
             }
-            
+            .navigationTitle("Notes")
             .onAppear {
                 showTabViewPopup = true
                 showPicker = true
@@ -123,7 +125,7 @@ struct NotesHomeView: View {
                print("recNumber: \(firestoreConnection.userDocument?.recCounter)")
             }
             
-        }.navigationBarTitle("Notes", displayMode: .inline)
+        
     }
 }
 
@@ -153,10 +155,10 @@ struct NotesList: View {
                     ForEach(userDocumentNotes) {
                         note in
                         
-                        
+
                         NavigationLink(destination: EditNoteView( showRecordPopup: $showRecordPopup, showPicker: $showPicker, showEditTabVew: $showEditTabView, selectedNote: note)) {
                             ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent, hasRecording: allNotes.hasRecordings(noteId: "\(note.id)", db: firestoreConnection))
-                                .listRowBackground(Color.init(red: 245/255, green: 245/255, blue: 245/255))
+                                
                             
                         }.onAppear {
                             getNote(note: note)
@@ -167,7 +169,7 @@ struct NotesList: View {
                     })
                 }
                 
-            }
+            }.listStyle(.inset)
             
         }
     }
@@ -196,7 +198,7 @@ struct ListCell: View {
                 Image(systemName: "mic")
             }
             
-        }
+        }.listRowBackground(Color.red)
         
         
     }
@@ -442,8 +444,8 @@ struct CustomTabViewHome: View {
                 Spacer()
                 NavigationLink(destination: NewNoteView(showPicker: $showPicker), label: {
                     Label("", systemImage: "square.and.pencil")
-                        .font(.system(size: 50))
-                        .foregroundStyle(.gray)
+                        .font(.system(size: 35))
+                        .foregroundStyle(.black)
                     
                     
                 })
@@ -459,14 +461,14 @@ struct CustomTabViewHome: View {
                 },
                        label: {
                     Label("", systemImage: "record.circle")
-                        .font(.system(size: 50))
-                        .foregroundStyle(.pink, .gray)
+                        .font(.system(size: 35))
+                        .foregroundStyle(.pink, .black)
                 })
                 Spacer()
                 
             }
             
-        }
+        }.frame(height: 70)
     }
 }
 

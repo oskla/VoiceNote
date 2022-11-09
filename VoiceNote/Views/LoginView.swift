@@ -61,12 +61,12 @@ struct LoginView: View {
                         showRegisterPage.toggle()
                     }
                     Spacer()
-                }.font(.light16)
+                }.font(.light16) // TODO: Make light18
                 
                 Spacer()
             }
            
-            }.onAppear{userName = "8@8.se";password = "Hejhej"}
+            }.onAppear{userName = "9@9.se";password = "Hejhej"}
             .padding(50)
             if showRegisterPage {
                 RegisterView(firestoreConnection: firestoreConnection, showLoginPage: $showLoginPage, showRegisterPage: $showRegisterPage)

@@ -41,7 +41,7 @@ struct PlayerView: View {
                 
                 HStack {
                     ScrollView(.horizontal) {
-                    Text(selectedRecording?.name ?? "No name") // TODO: What should recording be called?
+                    Text(selectedRecording?.nickname ?? "nil") 
                         .lineLimit(1)
                         .padding()
                     }

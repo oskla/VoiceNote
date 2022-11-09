@@ -141,6 +141,7 @@ class FirestoreConnection: ObservableObject {
                 "recording": FieldValue.arrayUnion([[
                     "name": urlPath,
                     "id": id,
+                    "nickname": "New recording " + "\(userDocument?.recCounter ?? 0)",
                     "recNumber": userDocument?.recCounter ?? 0 + 1
                     
                ]])

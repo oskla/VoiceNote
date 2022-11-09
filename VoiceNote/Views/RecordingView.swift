@@ -98,7 +98,6 @@ struct Recording2View: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea()
                 .foregroundColor(.white).opacity(0.97)
-               // .background(.white)
                 .border(Color.black, width: 1)
            
 
@@ -111,11 +110,8 @@ struct Recording2View: View {
                     let newUUID = UUID() // Create same ID for new Recording and new Note
                     
                     self.audioRecorder.stopRecording(db: firestoreConnection, userDocument: userDocument, allRecordings: allRecordings, selectedNoteId: "\(newUUID)")
+
                     
-                    let newNote = Note(id: newUUID, noteTitle: "New recording", noteContent: "")
-                    allNotes.addEntry(newNote: newNote)
-                    
-                    firestoreConnection.addNoteToDb(note: newNote)
                     
                     withAnimation {
                         showRecordPopup = false
@@ -279,7 +275,7 @@ struct RecordingMenu: View {
                     print("player should show")
                     // Add function here later - open Play-window
                 }) {
-                    RecordingSubMenuRow(selectedNote: $selectedNote, audioName: recording.name ?? "nil")
+                    RecordingSubMenuRow(selectedNote: $selectedNote, audioName: recording.nickname ?? "nil")
                         .frame(width: 500)
                 }.frame(width: 500)
                 

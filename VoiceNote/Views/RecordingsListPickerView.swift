@@ -25,20 +25,21 @@ struct RecordingsListPickerView: View {
             }
             VStack {
                 CustomTabViewHome(showRecordPopup: $showRecordPopup, showPicker: $showPicker)
-                    .frame(height: 90)
                 
             }
-        }.onAppear {
+        }.navigationTitle("Recordings")
+        .onAppear {
             showCustomTabView = true
         }
-        .navigationBarTitle("Recordings")
-            .overlay(alignment: .bottom) {
-                if showRecordPopup {
-                    Recording2View(showRecordPopup: $showRecordPopup, showTabViewPopup: $showCustomTabView, showEditTabView: $showEditTabView)
-                        .transition(.move(edge: .bottom))
-                        
-                }
+        .overlay(alignment: .bottom) {
+            if showRecordPopup {
+                Recording2View(showRecordPopup: $showRecordPopup, showTabViewPopup: $showCustomTabView, showEditTabView: $showEditTabView)
+                    .transition(.move(edge: .bottom))
+                    
             }
+        }
+//        .navigationBarTitle("Recordings")
+            
     }
 }
 
@@ -67,20 +68,24 @@ struct RecordingsList: View {
                                     ForEach(recordings, id: \.self) {
                                         recording in
                     
-                                        RecordingRow(audioURL: "New recording " + "\(recording.recNumber ?? 0)")
+                                        RecordingRow(audioURL: recording.name ?? "",
+                                                     audioName: recording.nickname ?? "").font(.bold21)
                     
                     
                                     }.onDelete(perform: removeRows)
                 }
                 
             }
-            Text("Empty list")
-        }.listStyle(SidebarListStyle())
+     
+                
+        }.listStyle(.inset)
+            
     }
 }
 
 struct RecordingRow: View {
     var audioURL: String
+    var audioName: String
     @EnvironmentObject var firestoreConnection: FirestoreConnection
     @ObservedObject var audioPlayer = AudioPlayer()
     
@@ -88,7 +93,7 @@ struct RecordingRow: View {
         
         HStack {
             
-            Text(audioURL)
+            Text(audioName)
             Spacer()
             if audioPlayer.isPlaying == false {
                 Button(action: {
