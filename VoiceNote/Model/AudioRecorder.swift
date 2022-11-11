@@ -16,7 +16,7 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
     
     override init() {
         super.init()
-        //fetchRecordings()
+  
     }
     
     let firestoreConnection = FirestoreConnection()
@@ -85,7 +85,7 @@ class AudioRecorder: NSObject, ObservableObject, Identifiable {
         // Upload to Firebase Storage
         handleAudioSendWith(allRecordings: allRecordings, db: db, url: "\(audioFileUrl)", completion: { data, metadata in
             
-           // print("data from completeion: \(data)") // - Why is this nil?
+           
             
             guard let downloadUrl = self.downloadUrl else {
                 return

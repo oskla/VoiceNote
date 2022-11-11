@@ -7,6 +7,7 @@
 		<string>IBMPlexSansDevanagari-Bold.ttf</string>
 		<string>IBMPlexSansDevanagari-Regular.ttf</string>
 		<string>IBMPlexSansDevanagari-Light.ttf</string>
+		<string>IBMPlexSansDevanagari-SemiBold.ttf</string>
 	</array>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>We need access to your microphone2</string>

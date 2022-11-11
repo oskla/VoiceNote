@@ -37,6 +37,7 @@
 		388A277C28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A277B28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift */; };
 		388A278928F8240E0019C70D /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A278828F8240E0019C70D /* Note.swift */; };
 		388A278B28F825180019C70D /* AllNotes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388A278A28F825180019C70D /* AllNotes.swift */; };
+		388D81FF291D029800DF5C41 /* EdgeBorders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 388D81FE291D029800DF5C41 /* EdgeBorders.swift */; };
 		38A1FC6F290C018B00B46B03 /* AllRecordings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38A1FC6E290C018B00B46B03 /* AllRecordings.swift */; };
 		38AACDED2919080A0087D1D2 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AACDEC2919080A0087D1D2 /* PickerView.swift */; };
 		38AACDEF291909240087D1D2 /* RecordingsListPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AACDEE291909240087D1D2 /* RecordingsListPickerView.swift */; };
@@ -97,6 +98,7 @@
 		388A277B28F823530019C70D /* VoiceNoteUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceNoteUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		388A278828F8240E0019C70D /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		388A278A28F825180019C70D /* AllNotes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllNotes.swift; sourceTree = "<group>"; };
+		388D81FE291D029800DF5C41 /* EdgeBorders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeBorders.swift; sourceTree = "<group>"; };
 		38A1FC6E290C018B00B46B03 /* AllRecordings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllRecordings.swift; sourceTree = "<group>"; };
 		38AACDEC2919080A0087D1D2 /* PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerView.swift; sourceTree = "<group>"; };
 		38AACDEE291909240087D1D2 /* RecordingsListPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingsListPickerView.swift; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 				384D11A5290AF66B00B2E434 /* AudioPlayer.swift */,
 				385E2830290DA65900D42B41 /* UserDocumentRecording.swift */,
 				385035612911734A00A6BB2D /* UserRecording.swift */,
+				388D81FE291D029800DF5C41 /* EdgeBorders.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -423,6 +426,7 @@
 				388785BD290A74B700ACD948 /* FirebaseStorageConnection.swift in Sources */,
 				385E2831290DA65900D42B41 /* UserDocumentRecording.swift in Sources */,
 				386731F128FDD6C400BA0F3D /* RecordingView.swift in Sources */,
+				388D81FF291D029800DF5C41 /* EdgeBorders.swift in Sources */,
 				3833F1E82900394000356843 /* NoteView.swift in Sources */,
 				38AACDEF291909240087D1D2 /* RecordingsListPickerView.swift in Sources */,
 				38A1FC6F290C018B00B46B03 /* AllRecordings.swift in Sources */,

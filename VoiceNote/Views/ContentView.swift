@@ -52,7 +52,7 @@ struct ContentView: View {
                         if showPicker {
                             PickerView(notesOrRecordings: $notesOrRecordings).padding()
                         }
-                    
+                        
                         
                         if notesOrRecordings == "notes" {
                             NotesHomeView(showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView, showPicker: $showPicker)
@@ -61,21 +61,22 @@ struct ContentView: View {
                         if notesOrRecordings == "recordings" {
                             RecordingsListPickerView(showPicker: $showPicker, showCustomTabView: $showTabViewPopup, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabView)
                         }
-                       
+                        
                     }
                     
                 }
-
+                
                 // If not logged in
             } else {
                 LoginView()
             }
             
-           
+            
         }.environmentObject(allNotes)
             .environmentObject(audioRecorder)
             .environmentObject(firestoreConnection)
             .environmentObject(allRecordings)
+        
     }
 }
 
@@ -94,37 +95,36 @@ struct NotesHomeView: View {
     
     var body: some View {
         
-       
-          
-            VStack(spacing: 0) {
-                NotesList(showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabView, showPicker: $showPicker)
+        
+        
+        VStack(spacing: 0) {
+            NotesList(showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabView, showPicker: $showPicker)
+            
+            
+            if showTabViewPopup {
                 
-                
-                if showTabViewPopup {
+                VStack {
+                    CustomTabViewHome(showRecordPopup: $showRecordPopup, showPicker: $showPicker)
                     
-                    VStack {
-                        CustomTabViewHome(showRecordPopup: $showRecordPopup, showPicker: $showPicker)
-                        
-                    }
                 }
-                
-            }
-            .overlay(alignment: .bottom) {
-                if showRecordPopup {
-                    Recording2View(showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
-                        .transition(.move(edge: .bottom))
-                        
-                }
-                    
-            }
-            .navigationTitle("Notes")
-            .onAppear {
-                showTabViewPopup = true
-                showPicker = true
-               // allRecordings.setCurrentRecNumber(db: firestoreConnection)
-               print("recNumber: \(firestoreConnection.userDocument?.recCounter)")
             }
             
+        }
+        .overlay(alignment: .bottom) {
+            if showRecordPopup {
+                Recording2View(showRecordPopup: $showRecordPopup, showTabViewPopup: $showTabViewPopup, showEditTabView: $showEditTabView)
+                    .transition(.move(edge: .bottom))
+                
+            }
+            
+        }
+        .navigationTitle("Notes")
+        .onAppear {
+            showTabViewPopup = true
+            showPicker = true
+       
+        }
+        
         
     }
 }
@@ -155,10 +155,10 @@ struct NotesList: View {
                     ForEach(userDocumentNotes) {
                         note in
                         
-
+                        
                         NavigationLink(destination: EditNoteView( showRecordPopup: $showRecordPopup, showPicker: $showPicker, showEditTabVew: $showEditTabView, selectedNote: note)) {
                             ListCell(noteTitle: note.noteTitle, noteContent: note.noteContent, hasRecording: allNotes.hasRecordings(noteId: "\(note.id)", db: firestoreConnection))
-                                
+                            
                             
                         }.onAppear {
                             getNote(note: note)
@@ -185,11 +185,11 @@ struct ListCell: View {
         HStack {
             VStack (alignment: .leading){
                 Text(noteTitle)
-                    .font(.bold21)
+                    .font(.bold16)
                     .bold()
                 
                 Text(noteContent)
-                    .font(.regular18)
+                    .font(.light14)
                     .lineLimit(2)
             }
             Spacer()
@@ -259,10 +259,10 @@ struct ExitKeyboardBar: View {
                 .overlay(Divider().padding(0), alignment: .top)
             
             
-        Image(systemName: "keyboard.chevron.compact.down")
-                
+            Image(systemName: "keyboard.chevron.compact.down")
+            
+        }
     }
-}
 }
 
 // MARK: EditNote
@@ -277,8 +277,10 @@ struct EditNoteView: View {
     @Binding var showPicker: Bool
     @Binding var showEditTabVew: Bool
     
+    
     @State var selectedNote: Note
     @State var showPlayer = false
+    @State var showPlayList = false
     @State var selectedRecording: UserDocumentRecording?
     @StateObject var audioPlayer = AudioPlayer()
     @State var noteToRemove: Note?
@@ -292,50 +294,58 @@ struct EditNoteView: View {
             VStack(spacing: 0) {
                 
                 TextField("New recording", text: $selectedNote.noteTitle)
-                    .font(.bold34)
-                    //.font(.system(size: 30).bold())
+                    .font(.btnBold)
                     .padding(.horizontal)
                 
                 
                 TextEditor(text: $selectedNote.noteContent)
-                    .font(.regular21)
+                    .font(.regular18)
                     .background(.cyan)
                     .padding(.horizontal)
                     .focused($contentIsFocused)
                 
-                //RecordingsList(selectedNote: $selectedNote)
+                
+            }
+            
+            VStack(spacing: 0) {
+                Spacer()
                 
                 if showPlayer {
-                    PlayerView(audioPlayer: audioPlayer, selectedRecording: $selectedRecording)
-                        .padding()
+                    PlayerView(audioPlayer: audioPlayer, selectedRecording: $selectedRecording).padding(.horizontal)
+                }
+                
+                
+                if showPlayList {
+                    
+                    PlayListView(audioPlayer: audioPlayer, selectedNote: $selectedNote, selectedRecording: $selectedRecording, showPlayer: $showPlayer, showPlayList: $showPlayList)
+                           // .frame(maxHeight: 320)
+                       // .frame(alignment: .trailing)
+                        
                         .transition(.move(edge: .bottom))
                     
                 }
-                
-                if showEditTabVew {
-                    CustomTabViewNotes(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote, showPlayer: $showPlayer, selectedRecording: $selectedRecording)
-                }
-                
-                
-                
                 
                 if contentIsFocused {
                     ExitKeyboardBar()
                         .onAppear {
                             showEditTabVew = false
                             contentIsFocused = true
+                            showPlayList = false
                         }
                         .onTapGesture {
-                        contentIsFocused = false
-                        showEditTabVew = true
-                    }
+                            contentIsFocused = false
+                            showEditTabVew = true
+                        }
                         .frame(height: 50)
                     
                 }
                 
-                
-                
+                if showEditTabVew {
+                    CustomTabViewNotes(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote, showPlayer: $showPlayer, showPlayList: $showPlayList, selectedRecording: $selectedRecording)
+                }
             }
+        
+                
             
         }.onAppear{
             noteToRemove = selectedNote
@@ -349,10 +359,14 @@ struct EditNoteView: View {
         .onDisappear { firestoreConnection.editNoteOnDb(noteToRemove: noteToRemove!, noteToAdd: selectedNote) }
         .overlay(alignment: .bottom) {
             if showRecordPopup {
-            RecordingEditNoteView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
-                .transition(.move(edge: .bottom))
+                RecordingEditNoteView(audioRecorder: audioRecorder, showRecordPopup: $showRecordPopup, showEditTabView: $showEditTabVew, selectedNote: $selectedNote)
+                    .transition(.move(edge: .bottom))
+                
+            }
             
-        } }
+          
+            
+        }
     }
     
     
@@ -367,52 +381,47 @@ struct CustomTabViewNotes: View {
     @Binding var showEditTabView: Bool
     @Binding var selectedNote: Note
     @Binding var showPlayer: Bool
+    @Binding var showPlayList: Bool
     @Binding var selectedRecording: UserDocumentRecording?
     var body: some View {
         
         ZStack {
             
             Rectangle()
-            //.foregroundColor(Color.init(red: 245/255, green: 245/255, blue: 245/255))
-                .foregroundColor(.white)
+
+                .foregroundColor(Color("Tab"))
                 .ignoresSafeArea()
             
             HStack {
                 Spacer()
                 
-                Menu {
-                    RecordingMenu(audioRecorder: audioRecorder, selectedNote: $selectedNote, showPlayer: $showPlayer, selectedRecording: $selectedRecording)
-                   
-                    
-                } label: {
-                    Image(systemName: "play.fill")
-                }.font(.system(size: 40))
-                    .foregroundStyle(.black)
-                    .onTapGesture {
-                        if showPlayer == true {
-                            withAnimation{
-                                showPlayer = false
-                            }
-                            
-                        }
+                Button(action: {
+                    withAnimation {
+                        showPlayList.toggle()
+                        showPlayer = false
                     }
-                
-                
+                    
+                },
+                       label: {
+                    Label("", systemImage: "play.fill")
+                        .font(.system(size: 40))
+                        .foregroundStyle(Color("black-white"))
+                    
+                })
                 
                 Spacer()
                 
                 Button(action: {
+                    
                     withAnimation {
                         showRecordPopup = true
                     }
                     
-                   // showEditTabView = false
-                    // print(selectedNote)
                 },
                        label: {
                     Label("", systemImage: "record.circle")
                         .font(.system(size: 40))
-                        .foregroundStyle(.pink, .black)
+                        .foregroundStyle(.pink, Color("black-white"))
                     //.navigationTitle("Voice notes")
                 })
                 
@@ -421,7 +430,7 @@ struct CustomTabViewNotes: View {
             }
             
         }
-        .background(.gray)
+        .foregroundColor(Color("Tab"))
         .frame(height: 70)
     }
     
@@ -436,7 +445,7 @@ struct CustomTabViewHome: View {
         ZStack {
             Rectangle()
                 .ignoresSafeArea()
-                .foregroundColor(Color.init(red: 245/255, green: 245/255, blue: 245/255))
+                .foregroundColor(Color("Tab"))
                 .overlay(Divider().padding(0), alignment: .top)
             
             
@@ -445,7 +454,7 @@ struct CustomTabViewHome: View {
                 NavigationLink(destination: NewNoteView(showPicker: $showPicker), label: {
                     Label("", systemImage: "square.and.pencil")
                         .font(.system(size: 35))
-                        .foregroundStyle(.black)
+                        .foregroundStyle(Color("black-white"))
                     
                     
                 })
@@ -462,7 +471,7 @@ struct CustomTabViewHome: View {
                        label: {
                     Label("", systemImage: "record.circle")
                         .font(.system(size: 35))
-                        .foregroundStyle(.pink, .black)
+                        .foregroundStyle(.pink, Color("black-white"))
                 })
                 Spacer()
                 
@@ -480,20 +489,21 @@ struct CustomTabViewHome: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView(audioRecorder: AudioRecorder(), notesOrRecordings: "notes").environmentObject(AllNotes())
-         // NotesHomeView(showRecordPopup: .constant(false), showTabViewPopup: .constant(true), showEditTabView: .constant(false))
+        // NotesHomeView(showRecordPopup: .constant(false), showTabViewPopup: .constant(true), showEditTabView: .constant(false))
         //  .environmentObject(AllNotes())
         
         //    .previewDevice("iPhone 13 Pro")
         //  NewNoteView().environmentObject(AllNotes())
-        //        EditNoteView(showRecordPopup: .constant(false), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(true)).environmentObject(AudioRecorder()).environmentObject(AllNotes()).environmentObject(FirestoreConnection())
+        // EditNoteView(showRecordPopup: .constant(false), selectedNote: Note(noteTitle: "hej", noteContent: "hej"), showEditTabVew: .constant(true), showPicker: .constant(true))
+        // .environmentObject(AudioRecorder()).environmentObject(AllNotes()).environmentObject(FirestoreConnection())
         //                      selectedNote: Note(noteTitle: "hej", noteContent: "hej"),
         //                      showEditTabVew: .constant(true))
         //            .environmentObject(AllNotes()).environmentObject(AudioRecorder())
-       // NotesList(showRecordPopup: .constant(false), showEditTabView: .constant(false))
+        // NotesList(showRecordPopup: .constant(false), showEditTabView: .constant(false))
         // RecordingView(audioRecorder: AudioRecorder())
-      //  CustomTabViewHome(audioRecorder: AudioRecorder(), showRecordPopup: .constant(false))
+        //  CustomTabViewHome(audioRecorder: AudioRecorder(), showRecordPopup: .constant(false))
         
-      //  ExitKeyboardBar()
+        //  ExitKeyboardBar()
     }
 }
 

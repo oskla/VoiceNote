@@ -209,37 +209,6 @@ class FirestoreConnection: ObservableObject {
         }
     }
     
-    func listenToDb() {
-        
-        if let currentUser = currentUser {
-            userDocumentListener = self.fireStore.collection("userData").document(currentUser.uid).addSnapshotListener {
-                snapshot, error in
-                
-                if let error = error {
-                    print("Error occured: \(error)")
-                    return
-                    
-                }
-                
-                guard let snapshot = snapshot else { return }
-                let result = Result {
-                    try snapshot.data(as: UserDocument.self)
-                }
-                
-                switch result {
-                case .success(let userData):
-                    self.userDocument = userData
-                case .failure(let error):
-                    print("Something went wrong, error: \(error)")
-                }
-                
-                
-                
-            }
-        }
-        
-        
-    }
     
     func stopListeningToDb() {
         if let userDocument = userDocument {

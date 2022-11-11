@@ -38,7 +38,7 @@ struct RecordingsListPickerView: View {
                     
             }
         }
-//        .navigationBarTitle("Recordings")
+
             
     }
 }
@@ -52,7 +52,7 @@ struct RecordingsList: View {
     
     func removeRows(at offsets: IndexSet) {
         if var userDocument = firestoreConnection.userDocument {
-            // userDocument.recording.remove(atOffsets: offsets)
+
             
         }
         
@@ -69,7 +69,7 @@ struct RecordingsList: View {
                                         recording in
                     
                                         RecordingRow(audioURL: recording.name ?? "",
-                                                     audioName: recording.nickname ?? "").font(.bold21)
+                                                     audioName: recording.nickname ?? "").font(.bold16)
                     
                     
                                     }.onDelete(perform: removeRows)

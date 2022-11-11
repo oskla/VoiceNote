@@ -36,6 +36,13 @@ extension Font {
     static let btnBold = Font.custom("IBMPlexSansDevanagari-Bold", size: Font.TextStyle.title3.size, relativeTo: .caption)
     static let bold21 = Font.custom("IBMPlexSansDevanagari-Bold", size: Font.TextStyle.caption.size, relativeTo: .caption)
     static let bold34 = Font.custom("IBMPlexSansDevanagari-Bold", size: Font.TextStyle.title2.size, relativeTo: .caption)
+    static let bold18 = Font.custom("IBMPlexSansDevanagari-Bold", size: Font.TextStyle.body.size, relativeTo: .caption)
+    static let bold16 = Font.custom("IBMPlexSansDevanagari-Bold", size: Font.TextStyle.callout.size, relativeTo: .caption)
+    
+    // Semi Bold
+    static let semiBold18 = Font.custom("IBMPlexSansDevanagari-SemiBold", size: Font.TextStyle.headline.size, relativeTo: .caption)
+    static let semiBold16 = Font.custom("IBMPlexSansDevanagari-SemiBold", size: Font.TextStyle.subheadline.size, relativeTo: .caption)
+    
     // Regular
     static let regular24 = Font.custom("IBMPlexSansDevanagari-Regular", size: Font.TextStyle.title3.size, relativeTo: .caption)
     static let regular21 = Font.custom("IBMPlexSansDevanagari-Regular", size: Font.TextStyle.caption.size, relativeTo: .caption)
@@ -44,6 +51,7 @@ extension Font {
     // Light
     static let light16 = Font.custom("IBMPlexSansDevanagari-Light", size: Font.TextStyle.subheadline.size, relativeTo: .caption)
     static let light18 = Font.custom("IBMPlexSansDevanagari-Light", size: Font.TextStyle.headline.size, relativeTo: .caption)
+    static let light14 = Font.custom("IBMPlexSansDevanagari-Light", size: Font.TextStyle.footnote.size, relativeTo: .caption)
     
 }
 extension Font.TextStyle {
@@ -62,5 +70,11 @@ extension Font.TextStyle {
         @unknown default:
             return 8
         }
+    }
+}
+
+extension View {
+    func border(width: CGFloat, edges: [Edge], color: Color) -> some View {
+        overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
     }
 }
